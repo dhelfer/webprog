@@ -10,4 +10,5 @@ Regionales News-Portal mit Yii, Bootstrap und jQuery
 
 ##CRUD-Generator##
 Is used to easily create models, views and controllers
+
 http://path/to/project/web/index.php?r=gii
