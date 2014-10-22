@@ -91,5 +91,20 @@ a.desc:after {
 }
 
 .blue {
-    background-color: blue;
+    background-color: darkblue;
+    font-weight: bold;
+}
+
+.blue li a:hover {
+    background-color: darkblue;
+    color : white;
+}
+
+.webcrawlerTable thead {
+    background-color: darkblue;
+    color: lightblue;
+}
+
+.webcrawlerTable thead tr {
+    height: 30px;
 }
