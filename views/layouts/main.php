@@ -19,49 +19,65 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
 <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'SolCity',
-                //'brandUrl' => Yii::$app->homeUrl,
+                'brandLabel' => '<i class="fa fa-home"></i> SolCity',
+                'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar navbar-fixed-top blue',
                 ],
             ]);
-            $categories = app\models\Category::find()->all();
-            $items = array();
-            foreach ($categories as $category) {
-                $items[] = array(
-                    'label' => $category->name,
-                    'url' => 'index.php?r=category/view&id=' . $category->categoryId,
-                );
-                $subcategories = app\models\Subcategory::findAll(array('categoryId' => $category->categoryId));
-                if (count($subcategories) > 0) {
-                    $items[count($items) - 1]['items'] = array();
-                    foreach ($subcategories as $subcategory) {
-                        $items[count($items) - 1]['items'][] = array(
-                            'label' => $subcategory->name,
-                            'url' => 'index.php?r=sub-category/view&id=' . $subcategory->subCategoryId,
-                        );
+            
+            if (Yii::$app->user->isGuest) {
+                $categories = app\models\Category::find()->all();
+                $items = array();
+                foreach ($categories as $category) {
+                    $items[] = array(
+                        'label' => $category->name,
+                        'url' => 'index.php?r=category/view&id=' . $category->categoryId,
+                    );
+                    $subcategories = app\models\Subcategory::findAll(array('categoryId' => $category->categoryId));
+                    if (count($subcategories) > 0) {
+                        $items[count($items) - 1]['items'] = array();
+                        foreach ($subcategories as $subcategory) {
+                            $items[count($items) - 1]['items'][] = array(
+                                'label' => $subcategory->name,
+                                'url' => 'index.php?r=sub-category/view&id=' . $subcategory->subCategoryId,
+                            );
+                        }
                     }
                 }
+                echo Nav::widget([
+                    'options' => ['class' => 'navbar-nav navbar'],
+                    'items' => $items,
+                ]);
+            } else {
+                echo Nav::widget([
+                    'options' => ['class' => 'navbar-nav navbar'],
+                    'items' => [
+                        ['label' => 'Neuen Artikel erfassen', 'url' => 'index.php?r=article/create'],
+                    ],
+                ]);
             }
+            
             echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar'],
-                /*'items' => [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['/site/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                            'url' => ['/site/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
-                ],*/
-                'items' => $items,
+                'options' => ['class' => 'navbar-nav navbar-right'],
+                'items' => [
+                    Yii::$app->user->isGuest ? [
+                        'label' => '<i class="fa fa-sign-in fa-lg"></i>',
+                        'url' => ['/site/login'],
+                    ] : [
+                        'label' => '<i class="fa fa-sign-out fa-lg"></i>',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post']
+                    ],
+                ],
+                'encodeLabels' => false,
             ]);
             NavBar::end();
         ?>
