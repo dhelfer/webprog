@@ -20,23 +20,21 @@ use Yii;
  * @property Event[] $events
  * @property Image $image
  */
-class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
-{
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
+
     public $authKey = 'asdf';
-    
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%user}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['userName', 'password'], 'required'],
             [['imageId'], 'integer'],
@@ -49,8 +47,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'userId' => 'User ID',
             'userName' => 'User Name',
@@ -65,55 +62,51 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getArticles()
-    {
+    public function getArticles() {
         return $this->hasMany(Article::className(), ['userId' => 'userId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getComments()
-    {
+    public function getComments() {
         return $this->hasMany(Comment::className(), ['userId' => 'userId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEvents()
-    {
+    public function getEvents() {
         return $this->hasMany(Event::className(), ['userId' => 'userId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getImage()
-    {
+    public function getImage() {
         return $this->hasOne(Image::className(), ['imageId' => 'imageId']);
     }
-    
+
     public function getAuthKey() {
         return $this->authKey;
     }
-    
+
     public function getId() {
         return $this->userId;
     }
-    
+
     public function validateAuthKey($authKey) {
         return true;
     }
-    
+
     public static function findIdentity($id) {
         return self::find()->where(['userId' => $id])->one();
     }
-    
+
     public static function findIdentityByAccessToken($token, $type = null) {
         return self::find()->where(['accessToken' => $token])->one();
     }
-    
+
     /**
      * Finds user by username.
      *
@@ -123,15 +116,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public static function findByUsername($username) {
         return self::find()->where(['userName' => $username])->one();
     }
-    
+
     /**
      * Validates password.
      *
      * @param  string  $password password to validate
      * @return boolean if password provided is valid for current user
      */
-    public function validatePassword($password)
-    {
+    public function validatePassword($password) {
         return $this->password === md5($password);
     }
+
 }

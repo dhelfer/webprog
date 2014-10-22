@@ -16,21 +16,19 @@ use Yii;
  * @property Event[] $events
  * @property Category $category
  */
-class Subcategory extends \yii\db\ActiveRecord
-{
+class Subcategory extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%subcategory}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['description'], 'string'],
             [['categoryId'], 'required'],
@@ -42,8 +40,7 @@ class Subcategory extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'subCategoryId' => 'Sub Category ID',
             'name' => 'Name',
@@ -55,24 +52,22 @@ class Subcategory extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getArticles()
-    {
+    public function getArticles() {
         return $this->hasMany(Article::className(), ['subCategoryId' => 'subCategoryId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEvents()
-    {
+    public function getEvents() {
         return $this->hasMany(Event::className(), ['subCategoryId' => 'subCategoryId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
-    {
+    public function getCategory() {
         return $this->hasOne(Category::className(), ['categoryId' => 'categoryId']);
     }
+
 }

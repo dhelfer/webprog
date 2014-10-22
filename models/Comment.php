@@ -15,21 +15,19 @@ use Yii;
  * @property Article $article
  * @property User $user
  */
-class Comment extends \yii\db\ActiveRecord
-{
+class Comment extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%comment}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['comment', 'userId', 'articleId'], 'required'],
             [['comment'], 'string'],
@@ -40,8 +38,7 @@ class Comment extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'commentId' => 'Comment ID',
             'comment' => 'Comment',
@@ -53,16 +50,15 @@ class Comment extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getArticle()
-    {
+    public function getArticle() {
         return $this->hasOne(Article::className(), ['articleId' => 'articleId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['userId' => 'userId']);
     }
+
 }

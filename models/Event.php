@@ -19,21 +19,19 @@ use Yii;
  * @property Venue $venue
  * @property Image[] $images
  */
-class Event extends \yii\db\ActiveRecord
-{
+class Event extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%event}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'userId', 'subCategoryId', 'venueId'], 'required'],
             [['name', 'description'], 'string'],
@@ -44,8 +42,7 @@ class Event extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'eventId' => 'Event ID',
             'name' => 'Name',
@@ -59,32 +56,29 @@ class Event extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSubCategory()
-    {
+    public function getSubCategory() {
         return $this->hasOne(Subcategory::className(), ['subCategoryId' => 'subCategoryId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['userId' => 'userId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getVenue()
-    {
+    public function getVenue() {
         return $this->hasOne(Venue::className(), ['venueId' => 'venueId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getImages()
-    {
+    public function getImages() {
         return $this->hasMany(Image::className(), ['eventId' => 'eventId']);
     }
+
 }

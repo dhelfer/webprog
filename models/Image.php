@@ -17,21 +17,19 @@ use Yii;
  * @property Article $article
  * @property User[] $users
  */
-class Image extends \yii\db\ActiveRecord
-{
+class Image extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%image}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['physicalPath'], 'required'],
             [['physicalPath', 'alternativeText'], 'string'],
@@ -42,8 +40,7 @@ class Image extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'imageId' => 'Image ID',
             'physicalPath' => 'Physical Path',
@@ -56,24 +53,22 @@ class Image extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEvent()
-    {
+    public function getEvent() {
         return $this->hasOne(Event::className(), ['eventId' => 'eventId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getArticle()
-    {
+    public function getArticle() {
         return $this->hasOne(Article::className(), ['articleId' => 'articleId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsers()
-    {
+    public function getUsers() {
         return $this->hasMany(User::className(), ['imageId' => 'imageId']);
     }
+
 }

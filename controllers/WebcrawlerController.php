@@ -2,28 +2,29 @@
 
 namespace app\controllers;
 
-class WebcrawlerController extends \yii\web\Controller
-{
-    
-    private function rssImport(){
+class WebcrawlerController extends \yii\web\Controller {
+
+    private function rssImport() {
         echo "asd";
-    }
-    /*
-     * Hier werden die Daten gesammelt.
-     */
-    public function actionConfirm()
-    {   $this->rssImport();
     }
 
     /*
-     * Hier werden die Links angezeigt, für welche Daten gesammelt werden.
+     * Hier werden die Daten gesammelt.
      */
-    public function actionIndex()
-    {
+
+    public function actionConfirm() {
+        $this->rssImport();
+    }
+
+    /*
+     * Hier werden die Links angezeigt, fï¿½r welche Daten gesammelt werden.
+     */
+
+    public function actionIndex() {
         $links = \app\models\Webcrawler::find()->all();
-        
+
         return $this->render('index', [
-            'links' => $links,
+                    'links' => $links,
         ]);
     }
 

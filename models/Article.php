@@ -19,21 +19,19 @@ use Yii;
  * @property Comment[] $comments
  * @property Image[] $images
  */
-class Article extends \yii\db\ActiveRecord
-{
+class Article extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%article}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['title', 'article', 'originLink'], 'string'],
             [['userId', 'subCategoryId'], 'required'],
@@ -44,8 +42,7 @@ class Article extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'articleId' => 'Article ID',
             'title' => 'Title',
@@ -59,32 +56,29 @@ class Article extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSubCategory()
-    {
+    public function getSubCategory() {
         return $this->hasOne(Subcategory::className(), ['subCategoryId' => 'subCategoryId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['userId' => 'userId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getComments()
-    {
+    public function getComments() {
         return $this->hasMany(Comment::className(), ['articleId' => 'articleId']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getImages()
-    {
+    public function getImages() {
         return $this->hasMany(Image::className(), ['articleId' => 'articleId']);
     }
+
 }

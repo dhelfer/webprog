@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -13,18 +14,18 @@ AppAsset::register($this);
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
-<head>
-    <meta charset="<?= Yii::$app->charset ?>"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
-    <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
-</head>
-<body>
-<?php $this->beginBody() ?>
-    <div class="wrap">
-        <?php
+    <head>
+        <meta charset="<?= Yii::$app->charset ?>"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?= Html::csrfMetaTags() ?>
+        <title><?= Html::encode($this->title) ?></title>
+<?php $this->head() ?>
+        <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
+    </head>
+    <body>
+            <?php $this->beginBody() ?>
+        <div class="wrap">
+            <?php
             NavBar::begin([
                 'brandLabel' => '<i class="fa fa-home"></i> SolCity',
                 'brandUrl' => Yii::$app->homeUrl,
@@ -32,7 +33,7 @@ AppAsset::register($this);
                     'class' => 'navbar navbar-fixed-top blue',
                 ],
             ]);
-            
+
             if (Yii::$app->user->isGuest) {
                 $categories = app\models\Category::find()->all();
                 $items = array();
@@ -64,40 +65,42 @@ AppAsset::register($this);
                     ],
                 ]);
             }
-            
+
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     Yii::$app->user->isGuest ? [
                         'label' => '<i class="fa fa-sign-in fa-lg"></i>',
                         'url' => ['/site/login'],
-                    ] : [
+                            ] : [
                         'label' => '<i class="fa fa-sign-out fa-lg"></i>',
                         'url' => ['/site/logout'],
                         'linkOptions' => ['data-method' => 'post']
-                    ],
+                            ],
                 ],
                 'encodeLabels' => false,
             ]);
             NavBar::end();
-        ?>
+            ?>
 
-        <div class="container">
-            <?= Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]) ?>
-            <?= $content ?>
+            <div class="container">
+                <?=
+                Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ])
+                ?>
+<?= $content ?>
+            </div>
         </div>
-    </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-            <p class="pull-right"><?= Yii::powered() ?></p>
-        </div>
-    </footer>
+        <footer class="footer">
+            <div class="container">
+                <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+                <p class="pull-right"><?= Yii::powered() ?></p>
+            </div>
+        </footer>
 
 <?php $this->endBody() ?>
-</body>
+    </body>
 </html>
 <?php $this->endPage() ?>

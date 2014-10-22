@@ -16,21 +16,19 @@ use Yii;
  *
  * @property Event[] $events
  */
-class Venue extends \yii\db\ActiveRecord
-{
+class Venue extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%venue}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['zipCode'], 'integer'],
             [['geoTagLatitude', 'geoTagLongitude'], 'number'],
@@ -41,8 +39,7 @@ class Venue extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'venueId' => 'Venue ID',
             'zipCode' => 'Zip Code',
@@ -56,8 +53,8 @@ class Venue extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEvents()
-    {
+    public function getEvents() {
         return $this->hasMany(Event::className(), ['venueId' => 'venueId']);
     }
+
 }

@@ -13,21 +13,19 @@ use Yii;
  *
  * @property Subcategory[] $subcategories
  */
-class Category extends \yii\db\ActiveRecord
-{
+class Category extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%category}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255]
@@ -37,8 +35,7 @@ class Category extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'categoryId' => 'Category ID',
             'name' => 'Name',
@@ -49,8 +46,8 @@ class Category extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSubcategories()
-    {
+    public function getSubcategories() {
         return $this->hasMany(Subcategory::className(), ['categoryId' => 'categoryId']);
     }
+
 }

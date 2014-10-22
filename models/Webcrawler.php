@@ -13,21 +13,19 @@ use Yii;
  *
  * @property Category $category
  */
-class Webcrawler extends \yii\db\ActiveRecord
-{
+class Webcrawler extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%webcrawler}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['link', 'categoryId'], 'required'],
             [['link'], 'string'],
@@ -38,8 +36,7 @@ class Webcrawler extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'webcrawlerId' => 'Webcrawler ID',
             'link' => 'Link',
@@ -50,8 +47,8 @@ class Webcrawler extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
-    {
+    public function getCategory() {
         return $this->hasOne(Category::className(), ['categoryId' => 'categoryId']);
     }
+
 }
