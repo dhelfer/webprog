@@ -21,20 +21,37 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
-
 <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'My Company',
-                'brandUrl' => Yii::$app->homeUrl,
+                //'brandLabel' => 'My Company',
+                //'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+                    'class' => 'navbar navbar-fixed-top blue',
                 ],
             ]);
+            $categories = app\models\Category::find()->all();
+            $items = array();
+            foreach ($categories as $category) {
+                $items[] = array(
+                    'label' => $category->name,
+                    'url' => 'index.php?r=category/view&id=' . $category->categoryId,
+                );
+                $subcategories = app\models\Subcategory::findAll(array('categoryId' => $category->categoryId));
+                if (count($subcategories) > 0) {
+                    $items[count($items) - 1]['items'] = array();
+                    foreach ($subcategories as $subcategory) {
+                        $items[count($items) - 1]['items'][] = array(
+                            'label' => $subcategory->name,
+                            'url' => 'index.php?r=sub-category/view&id=' . $subcategory->subCategoryId,
+                        );
+                    }
+                }
+            }
             echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
+                'options' => ['class' => 'navbar-nav navbar'],
+                /*'items' => [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'About', 'url' => ['/site/about']],
                     ['label' => 'Contact', 'url' => ['/site/contact']],
@@ -43,7 +60,8 @@ AppAsset::register($this);
                         ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
                             'url' => ['/site/logout'],
                             'linkOptions' => ['data-method' => 'post']],
-                ],
+                ],*/
+                'items' => $items,
             ]);
             NavBar::end();
         ?>
