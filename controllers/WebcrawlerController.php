@@ -11,9 +11,10 @@ use \app\commands\WebCrawlerCmdController;
 class WebcrawlerController extends \yii\web\Controller {
 
     public function actionImport() {
-        $webcrawlerCmd = new WebCrawlerCmdController('WebCrawlerCmd', null);
-        $success = $webcrawlerCmd->actionImport();
-        var_dump($success);
+        $states = WebCrawlerCmdController::import();
+        return $this->render('import_state', [
+            'states' => $states,
+        ]);
     }
 
     /*
