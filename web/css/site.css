@@ -136,7 +136,7 @@ p.readMore {
 }
 
 div#featArticle {
-    height: 300px;
+    /*height: 300px;*/
 }
 
 div.inArticle {
@@ -150,6 +150,8 @@ div.inArticleHead {
     -moz-border-top-right-radius: 15px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    min-height: 100px;
+
 }
 
 div.inArticleFoot {
@@ -160,10 +162,10 @@ div.inArticleFoot {
 }
 
 div.panel-body-extra {
-    height: 130px;
+    min-height: 110px;
     overflow: hidden;
 }
 
 div.panel-footer-extra {
-    height: 60px;
+   min-height: 60px;
 }
