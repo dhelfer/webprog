@@ -4,11 +4,16 @@ namespace app\controllers;
 
 use app\models\Article;
 use yii\data\ActiveDataProvider;
+use \app\models\Webcrawler;
+use \app\models\User;
+use \app\commands\WebCrawlerCmdController;
 
 class WebcrawlerController extends \yii\web\Controller {
 
     public function actionImport() {
-        echo "asd";
+        $webcrawlerCmd = new WebCrawlerCmdController('WebCrawlerCmd', null);
+        $success = $webcrawlerCmd->actionImport();
+        var_dump($success);
     }
 
     /*
@@ -17,9 +22,9 @@ class WebcrawlerController extends \yii\web\Controller {
 
     public function actionConfirm() {
         $dataProvider = new ActiveDataProvider([
-            'query' => \app\models\Article::find()->where(['userId' => 1, 'released' => 0]),
+            'query' => Article::find()->where(['userId' => User::find()->where("username = 'SOLCITY_RSS_CRAWLER'")->one()->userId, 'released' => 0]),
         ]);
-
+        
         return $this->render('confirm', [
             'dataProvider' => $dataProvider,
         ]);
@@ -30,10 +35,10 @@ class WebcrawlerController extends \yii\web\Controller {
      */
 
     public function actionIndex() {
-        $links = \app\models\Webcrawler::find()->all();
+        $links = Webcrawler::find()->all();
 
         return $this->render('index', [
-                    'links' => $links,
+            'links' => $links,
         ]);
     }
     

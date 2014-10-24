@@ -3,8 +3,9 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\Subcategory;
+use app\models\Category;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -35,14 +36,14 @@ AppAsset::register($this);
             ]);
 
             if (Yii::$app->user->isGuest) {
-                $categories = app\models\Category::find()->all();
+                $categories = Category::find()->all();
                 $items = array();
                 foreach ($categories as $category) {
                     $items[] = array(
                         'label' => $category->name,
                         'url' => 'index.php?r=category/view&id=' . $category->categoryId,
                     );
-                    $subcategories = app\models\Subcategory::findAll(array('categoryId' => $category->categoryId));
+                    $subcategories = Subcategory::findAll(array('categoryId' => $category->categoryId));
                     if (count($subcategories) > 0) {
                         $items[count($items) - 1]['items'] = array();
                         foreach ($subcategories as $subcategory) {
@@ -62,6 +63,7 @@ AppAsset::register($this);
                     'options' => ['class' => 'navbar-nav navbar'],
                     'items' => [
                         ['label' => 'Neuen Artikel erfassen', 'url' => 'index.php?r=article/create'],
+                        ['label' => 'RSS Feeds verwalten', 'url' => 'index.php?r=webcrawler/index'],
                     ],
                 ]);
             }

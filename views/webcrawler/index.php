@@ -17,4 +17,4 @@
 <br>
 <br>
 
-<a href='<?php echo $_SERVER["PHP_SELF"] ?>?r=webcrawler/confirm'><button>Starte Import</button></a>
+<a href='<?php echo $_SERVER["PHP_SELF"] ?>?r=webcrawler/import'><button>Starte Import</button></a>
