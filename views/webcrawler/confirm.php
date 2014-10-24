@@ -1,9 +1,35 @@
 <?php
-/* @var $this yii\web\View */
-?>
-<h1>webcrawler/index</h1>
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Articles';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="article-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'articleId',
+            'title:ntext',
+            'article:ntext',
+            'originLink:ntext',
+            [
+                'attribute' => 'releaseLink',
+                'format' => 'raw',
+                'value' => function ($model, $key, $index) { 
+                    return $model->releaseLink;
+                },
+            ],
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+</div>

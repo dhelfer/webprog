@@ -80,5 +80,13 @@ class Article extends \yii\db\ActiveRecord {
     public function getImages() {
         return $this->hasMany(Image::className(), ['articleId' => 'articleId']);
     }
-
+    
+    public function release() {
+        $this->released = 1;
+        return $this->save();
+    }
+    
+    public function getReleaseLink() {
+        return \yii\helpers\Html::a('release ' . $this->articleId, 'index.php?r=webcrawler/release&id=' . $this->articleId);
+    }
 }

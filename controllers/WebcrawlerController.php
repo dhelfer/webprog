@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Article;
+use yii\data\ActiveDataProvider;
+
 class WebcrawlerController extends \yii\web\Controller {
 
-    private function rssImport() {
+    public function actionImport() {
         echo "asd";
     }
 
@@ -13,7 +16,13 @@ class WebcrawlerController extends \yii\web\Controller {
      */
 
     public function actionConfirm() {
-        $this->rssImport();
+        $dataProvider = new ActiveDataProvider([
+            'query' => \app\models\Article::find()->where(['userId' => 1, 'released' => 0]),
+        ]);
+
+        return $this->render('confirm', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /*
@@ -27,5 +36,12 @@ class WebcrawlerController extends \yii\web\Controller {
                     'links' => $links,
         ]);
     }
-
+    
+    public function actionRelease($id) {
+        if (Article::find()->where('articleId = :articleId', ['articleId' => $id])->one()->release()) {
+            return $this->redirect(['confirm']);
+        } else {
+            die('asdf');
+        }
+    }
 }
