@@ -21,7 +21,7 @@ use Yii;
  */
 class Article extends \yii\db\ActiveRecord {
     
-    const ARTICLELEN = 180;
+    const ARTICLELEN = 200;
     
     /**
      * @inheritdoc
@@ -96,7 +96,9 @@ class Article extends \yii\db\ActiveRecord {
     public function getShortArticle(){
         $pos = strlen($this->article);
         if ($pos >= self::ARTICLELEN){
-            $pos = strpos($this->article, " ", self::ARTICLELEN);
+            if(!empty( strpos($this->article, " ", self::ARTICLELEN))){
+                $pos = strpos($this->article, " ", self::ARTICLELEN);
+            }
         }
         
         return substr($this->article, 0, $pos);
