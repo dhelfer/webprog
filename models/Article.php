@@ -36,8 +36,8 @@ class Article extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['title', 'article', 'originLink'], 'string'],
-            [['userId', 'subCategoryId'], 'required'],
-            [['userId', 'subCategoryId'], 'integer']
+            [['userId'], 'required'],
+            [['userId', 'subCategoryId', 'categoryId'], 'integer']
         ];
     }
 
