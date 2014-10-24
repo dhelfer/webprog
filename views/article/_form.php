@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use dosamigos\ckeditor\CKEditor
+use dosamigos\ckeditor\CKEditor;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Article */
@@ -13,18 +14,22 @@ use dosamigos\ckeditor\CKEditor
 
     <?php $form = ActiveForm::begin(); ?>
     
-    <?= $form->field($model, 'title')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'title')->textInput() ?>
     
+    <?= $form->field($model, 'subCategoryId')->dropDownList(ArrayHelper::map(app\models\Subcategory::find()->all(), 'subCategoryId', 'name'))  ?>
+    
+
     <?= $form->field($model, 'article')->widget(CKEditor::className(), [
         'options' => ['rows' => 6],
         'preset' => 'basic'
     ]) ?>
 
-    <?= $form->field($model, 'originLink')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'userId')->textInput() ?>
-
-    <?= $form->field($model, 'subCategoryId')->textInput() ?>
+    <script type="text/javascript">
+        CKEDITOR.replace( 'editor1', {
+            filebrowserUploadUrl: "upload.php"
+        } );
+       alert("asd");
+    </script>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

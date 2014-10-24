@@ -45,9 +45,14 @@ class CategoryController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
-        return $this->render('view', [
-                    'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+        if(!$model->hasChildren()){
+            return $this->render('view', [
+                        'model' => $model,
+            ]);
+        } else {
+            throw new \yii\web\HttpException(404, Yii::t('yii', 'Hier kommst du nicht rein, Man!'));
+        }
     }
 
     /**

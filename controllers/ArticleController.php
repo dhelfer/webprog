@@ -57,7 +57,7 @@ class ArticleController extends Controller {
      */
     public function actionCreate() {
         $model = new Article();
-
+        $model->userId = Yii::$app->user->identity->userId;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->articleId]);
         } else {
