@@ -11,30 +11,23 @@ $this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-view">
+        <div class="row">
+            <div class="col-lg">
+                <div class="panel panel-default inArticle">
+                    <div class="panel-heading inArticleHead" >
+                        <h1><?= Html::encode($this->title) ?></h1>
+                        <?php echo $model->subCategory->name ?>
+                    </div>
+                    
+                    <div class="panel-body">
+                        <?php echo $model->article ?>
+                    </div>
+                    
+                    <div class="panel-footer inArticleFoot">
+                        <a href='<?php echo $model->originLink ?>'><?php echo $model->originLink ?></a>
+                     </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->articleId], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->articleId], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'articleId',
-            'title:ntext',
-            'article:ntext',
-            'originLink:ntext',
-            'userId',
-            'subCategoryId',
-        ],
-    ]) ?>
-
+                </div>
+            </div>
+        </div>
 </div>

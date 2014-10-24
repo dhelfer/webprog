@@ -20,7 +20,9 @@ use Yii;
  * @property Image[] $images
  */
 class Article extends \yii\db\ActiveRecord {
-
+    
+    const ARTICLELEN = 180;
+    
     /**
      * @inheritdoc
      */
@@ -81,6 +83,7 @@ class Article extends \yii\db\ActiveRecord {
         return $this->hasMany(Image::className(), ['articleId' => 'articleId']);
     }
     
+
     public function release() {
         $this->released = 1;
         return $this->save();
@@ -88,5 +91,22 @@ class Article extends \yii\db\ActiveRecord {
     
     public function getReleaseLink() {
         return \yii\helpers\Html::a('release ' . $this->articleId, 'index.php?r=webcrawler/release&id=' . $this->articleId);
+    }
+
+    public function getShortArticle(){
+        $pos = strlen($this->article);
+        if ($pos >= self::ARTICLELEN){
+            $pos = strpos($this->article, " ", self::ARTICLELEN);
+        }
+        
+        return substr($this->article, 0, $pos);
+    }
+    
+    public function showReadMore(){
+        if(strlen($this->article) > self::ARTICLELEN){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

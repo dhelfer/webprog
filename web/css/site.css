@@ -129,3 +129,41 @@ a.desc:after {
 .webcrawlerTable thead tr {
     height: 30px;
 }
+
+p.readMore {
+    text-align: right;
+    padding-right: 10px;
+}
+
+div#featArticle {
+    height: 300px;
+}
+
+div.inArticle {
+    border: 2px solid #4863A0; 
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+}
+
+div.inArticleHead {
+    -moz-border-top-left-radius: 15px;
+    -moz-border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+div.inArticleFoot {
+    -moz-border-bottom-left-radius: 15px;
+    -moz-border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+div.panel-body-extra {
+    height: 130px;
+    overflow: hidden;
+}
+
+div.panel-footer-extra {
+    height: 60px;
+}
