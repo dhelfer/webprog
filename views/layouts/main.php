@@ -84,19 +84,14 @@ AppAsset::register($this);
             ?>
 
             <div class="container">
-                <?=
-                Breadcrumbs::widget([
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ])
-                ?>
-<?= $content ?>
+                <?= $content ?>
             </div>
         </div>
 
         <footer class="footer">
             <div class="container">
-                <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-                <p class="pull-right"><?= Yii::powered() ?></p>
+                <p class="pull-left">&copy; SolCity  <?= date('Y') ?></p>
+                <p class="pull-right"></p>
             </div>
         </footer>
 

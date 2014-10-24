@@ -13,26 +13,47 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sub-category-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <br>
+    
+    <div class="row">
+        
+        <?php
+            $articles = \app\models\Article::find()->where(['subCategoryId' => $model->subCategoryId])->all();
+            $items = array();
+            $counter = 0;
+            if(count($articles) > 0):
+            foreach ($articles as $article):
+        ?>   
+            <div class=" col-lg-4" id="featArticle">
+                <div class="panel panel-default inArticle">
+                    <div class="panel-heading inArticleHead" >
+                        <h2><?php echo $article->title; ?></h2>
+                    </div>
+                    
+                    <div class="panel-body panel-body-extra">
+                        <p><?php echo $article->shortArticle; ?></p>
+                    </div>
+                    
+                    <div class="panel-footer panel-footer-extra inArticleFoot">
+                    <?php if( $article->showReadMore() ): ?>
+                        <p class="readMore"><a class="btn btn-default" href="<?php echo $_SERVER['PHP_SELF'] ?>?r=article/view&id=<?php echo $article->articleId ?>">Weiterlesen</a></p>
+                    <?php endif; ?>
+                     </div>
+                     
+                </div>
+            </div>
+            
+            
+        <?php
+            $counter++;
+            if ($counter%3==0){
+                echo "</div><div class='row'>";
+            }
+            endforeach;
+            endif;
+        ?>
+        
+        </div>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->subCategoryId], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->subCategoryId], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'subCategoryId',
-            'name',
-            'description:ntext',
-            'categoryId',
-        ],
-    ]) ?>
 
 </div>

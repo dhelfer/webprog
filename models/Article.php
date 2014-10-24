@@ -20,7 +20,9 @@ use Yii;
  * @property Image[] $images
  */
 class Article extends \yii\db\ActiveRecord {
-
+    
+    const ARTICLELEN = 180;
+    
     /**
      * @inheritdoc
      */
@@ -80,5 +82,21 @@ class Article extends \yii\db\ActiveRecord {
     public function getImages() {
         return $this->hasMany(Image::className(), ['articleId' => 'articleId']);
     }
-
+    
+    public function getShortArticle(){
+        $pos = strlen($this->article);
+        if ($pos >= self::ARTICLELEN){
+            $pos = strpos($this->article, " ", self::ARTICLELEN);
+        }
+        
+        return substr($this->article, 0, $pos);
+    }
+    
+    public function showReadMore(){
+        if(strlen($this->article) > self::ARTICLELEN){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
