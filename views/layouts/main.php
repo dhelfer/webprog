@@ -30,7 +30,7 @@ AppAsset::register($this);
                 'brandLabel' => '<i class="fa fa-home"></i> SolCity',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar navbar-fixed-top blue',
+                    'class' => 'navbar navbar-fixed-top solcity-menu',
                 ],
             ]);
 

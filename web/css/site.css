@@ -90,14 +90,35 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
-.blue {
-    background-color: darkblue;
+.solcity-menu {
+    background-color: #4863A0;
     font-weight: bold;
 }
 
-.blue li a:hover {
-    background-color: darkblue;
-    color : white;
+.solcity-menu .navbar-brand {
+    color: #FEFCFF;
+}
+
+.solcity-menu li a {
+    background-color: #4863A0;
+    color: #FEFCFF;
+}
+
+.solcity-menu li a:hover {
+    background-color: #4863A0;
+    color: #FEFCFF;
+}
+
+.solcity-menu .dropdown .dropdown-menu {
+    background-color: #4863A0;
+}
+
+.solcity-menu .dropdown a:focus {
+    background-color: #4863A0;
+}
+
+.solcity-menu .dropdown a:first-child {
+    background-color: #4863A0;
 }
 
 .webcrawlerTable thead {
