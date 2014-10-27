@@ -2,16 +2,16 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "{{%webcrawler}}".
  *
  * @property integer $webcrawlerId
  * @property string $link
  * @property integer $categoryId
+ * @property integer $subCategoryId
  *
  * @property Category $category
+ * @property Subcategory $subCategory
  */
 class Webcrawler extends \yii\db\ActiveRecord {
 
@@ -27,9 +27,9 @@ class Webcrawler extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['link', 'categoryId'], 'required'],
+            [['link'], 'required'],
             [['link'], 'string'],
-            [['categoryId'], 'integer']
+            [['categoryId', 'subCategoryId'], 'integer']
         ];
     }
 
@@ -41,6 +41,7 @@ class Webcrawler extends \yii\db\ActiveRecord {
             'webcrawlerId' => 'Webcrawler ID',
             'link' => 'Link',
             'categoryId' => 'Category ID',
+            'subCategoryId' => 'Sub Category ID',
         ];
     }
 
@@ -51,4 +52,10 @@ class Webcrawler extends \yii\db\ActiveRecord {
         return $this->hasOne(Category::className(), ['categoryId' => 'categoryId']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubCategory() {
+        return $this->hasOne(Subcategory::className(), ['subCategoryId' => 'subCategoryId']);
+    }
 }

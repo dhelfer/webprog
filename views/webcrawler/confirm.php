@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             'articleId',
             'title:ntext',
             'article:ntext',
@@ -28,7 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->releaseLink;
                 },
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {delete}',
+            ],
         ],
     ]); ?>
 

@@ -13,7 +13,10 @@ use Yii;
  * @property string $originLink
  * @property integer $userId
  * @property integer $subCategoryId
+ * @property integer $released
+ * @property integer $categoryId
  *
+ * @property Category $category
  * @property Subcategory $subCategory
  * @property User $user
  * @property Comment[] $comments
@@ -37,7 +40,7 @@ class Article extends \yii\db\ActiveRecord {
         return [
             [['title', 'article', 'originLink'], 'string'],
             [['userId'], 'required'],
-            [['userId', 'subCategoryId', 'categoryId'], 'integer']
+            [['userId', 'subCategoryId', 'released', 'categoryId'], 'integer']
         ];
     }
 
@@ -52,9 +55,17 @@ class Article extends \yii\db\ActiveRecord {
             'originLink' => 'Origin Link',
             'userId' => 'User ID',
             'subCategoryId' => 'Sub Category ID',
+            'released' => 'Released',
+            'categoryId' => 'Category ID', 
         ];
     }
-
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory() {
+        return $this->hasOne(Category::className(), ['categoryId' => 'categoryId']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

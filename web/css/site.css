@@ -121,15 +121,6 @@ a.desc:after {
     background-color: #4863A0;
 }
 
-.webcrawlerTable thead {
-    background-color: darkblue;
-    color: lightblue;
-}
-
-.webcrawlerTable thead tr {
-    height: 30px;
-}
-
 p.readMore {
     text-align: right;
     padding-right: 10px;

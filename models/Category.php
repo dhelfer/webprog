@@ -11,7 +11,9 @@ use Yii;
  * @property string $name
  * @property string $description
  *
+ * @property Article[] $articles
  * @property Subcategory[] $subcategories
+ * @property Webcrawler[] $webcrawlers 
  */
 class Category extends \yii\db\ActiveRecord {
 
@@ -42,7 +44,14 @@ class Category extends \yii\db\ActiveRecord {
             'description' => 'Description',
         ];
     }
-
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getArticles() {
+        return $this->hasMany(Article::className(), ['categoryId' => 'categoryId']);
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -52,5 +61,12 @@ class Category extends \yii\db\ActiveRecord {
     
     public function hasChildren(){
         return Subcategory::find()->where(["categoryId" => $this->categoryId])->count() > 0;       
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWebcrawlers() {
+        return $this->hasMany(Webcrawler::className(), ['categoryId' => 'categoryId']);
     }
 }

@@ -15,6 +15,7 @@ use Yii;
  * @property Article[] $articles
  * @property Event[] $events
  * @property Category $category
+ * @property Webcrawler[] $webcrawlers
  */
 class Subcategory extends \yii\db\ActiveRecord {
 
@@ -69,5 +70,11 @@ class Subcategory extends \yii\db\ActiveRecord {
     public function getCategory() {
         return $this->hasOne(Category::className(), ['categoryId' => 'categoryId']);
     }
-
+    
+    /**
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getWebcrawlers() {
+        return $this->hasMany(Webcrawler::className(), ['subCategoryId' => 'subCategoryId']);
+    }
 }
