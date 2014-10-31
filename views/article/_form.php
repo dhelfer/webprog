@@ -18,18 +18,17 @@ use yii\helpers\ArrayHelper;
     
     <?= $form->field($model, 'subCategoryId')->dropDownList(ArrayHelper::map(app\models\Subcategory::find()->all(), 'subCategoryId', 'name'))  ?>
     
-
     <?= $form->field($model, 'article')->widget(CKEditor::className(), [
         'options' => ['rows' => 6],
         'preset' => 'basic'
     ]) ?>
 
-    <script type="text/javascript">
+<!--    <script type="text/javascript">
         CKEDITOR.replace( 'editor1', {
             filebrowserUploadUrl: "upload.php"
         } );
        alert("asd");
-    </script>
+    </script>-->
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -38,3 +37,12 @@ use yii\helpers\ArrayHelper;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$importStatus = \solcity\rssparser\Importer::widget(['options' => ['action' => 'import']]);
+?>
+<pre>
+<?php
+    print_r($import);
+    //print_r($importer->import());
+?>
+</pre>

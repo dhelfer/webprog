@@ -37,3 +37,7 @@ https://getcomposer.org/doc/00-intro.md
     - yii migrate
 
 http://www.yiiframework.com/doc-2.0/guide-db-migrations.html
+
+##RSS Parser##
+use like:
+- $importStatus = \solcity\rssparser\Importer::widget(['options' => ['action' => 'import']]);
