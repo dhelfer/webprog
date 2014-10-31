@@ -37,12 +37,3 @@ use yii\helpers\ArrayHelper;
     <?php ActiveForm::end(); ?>
 
 </div>
-<?php
-$importStatus = \solcity\rssparser\Importer::widget(['options' => ['action' => 'import']]);
-?>
-<pre>
-<?php
-    print_r($import);
-    //print_r($importer->import());
-?>
-</pre>

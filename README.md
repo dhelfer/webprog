@@ -7,6 +7,7 @@ Regionales News-Portal mit Yii, Bootstrap und jQuery
 - use **sqlscripts/create_database.sql** (does what expected)
 - download Yii 2.0 (http://www.yiiframework.com/download/)
 - insert **vendor/** folder into project
+- use composer to install dependent packages (ckeditor, rssparser)
 
 ##CRUD-Generator##
 Is used to easily create models, views and controllers
@@ -39,7 +40,7 @@ https://getcomposer.org/doc/00-intro.md
 http://www.yiiframework.com/doc-2.0/guide-db-migrations.html
 
 ##RSS Parser##
+if new version is online:
 - php composer.phar update
 use webcrawler as follows:
-- $importStatus = \solcity\rssparser\Importer::widget(['options' => ['action' => 'import']]);
-- $importStatus is a JSON-Array with import report
+- boolean $importStatus = \solcity\rssparser\Importer::widget(['options' => ['action' => 'import']]);

@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use \yii\helpers\Html;
 
 /**
  * This is the model class for table "{{%article}}".
@@ -101,7 +101,7 @@ class Article extends \yii\db\ActiveRecord {
     }
     
     public function getReleaseLink() {
-        return \yii\helpers\Html::a('release ' . $this->articleId, 'index.php?r=webcrawler/release&id=' . $this->articleId);
+        return Html::a('release ' . $this->articleId, 'index.php?r=webcrawler/release&id=' . $this->articleId);
     }
 
     public function getShortArticle(){
@@ -121,5 +121,9 @@ class Article extends \yii\db\ActiveRecord {
         } else {
             return false;
         }
+    }
+    
+    public function getDuplicateByOriginlink() {
+        return Article::find()->where(['originLink' => $this->originLink])->one();
     }
 }

@@ -160,3 +160,15 @@ div.panel-body-extra {
 div.panel-footer-extra {
    min-height: 60px;
 }
+
+.fa.fa-thumbs-up.green {
+    color: #008000;
+}
+
+.fa.fa-thumbs-down.red {
+    color: #FF0000;
+}
+
+.fa.fa-thumbs-up.orange {
+    color: #FFA500;
+}

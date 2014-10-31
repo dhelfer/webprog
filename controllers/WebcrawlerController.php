@@ -8,14 +8,13 @@ use yii\web\NotFoundHttpException;
 use app\models\Article;
 use \app\models\Webcrawler;
 use \app\models\User;
-use \app\commands\WebCrawlerCmdController;
+use \solcity\rssparser\Importer;
+use \app\models\WebcrawlerImportLog;
 
 class WebcrawlerController extends \yii\web\Controller {
     public function actionImport() {
-        $states = WebCrawlerCmdController::import();
-        return $this->render('import_state', [
-            'states' => $states,
-        ]);
+        $state = Importer::widget(['options' => ['action' => 'import']]);
+        $this->redirect('index.php?r=webcrawler/report');
     }
 
     public function actionConfirm() {
@@ -106,5 +105,11 @@ class WebcrawlerController extends \yii\web\Controller {
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function actionReport() {
+        return $this->render('import_state', [
+            'log' => new ActiveDataProvider(['query' => WebcrawlerImportLog::find()->where("DATE(executionTime) = CURDATE()")]),
+        ]);
     }
 }

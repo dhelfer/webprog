@@ -40,4 +40,3 @@ $this->title = 'RSS Feeds';
 </div>
 
 <a href='<?php echo $_SERVER["PHP_SELF"] ?>?r=webcrawler/import' class="btn btn-danger">Starte Import</a>
-
