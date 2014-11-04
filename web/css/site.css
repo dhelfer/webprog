@@ -161,14 +161,18 @@ div.panel-footer-extra {
    min-height: 60px;
 }
 
-.fa.fa-thumbs-up.green {
+.green {
     color: #008000;
 }
 
-.fa.fa-thumbs-down.red {
+.red {
     color: #FF0000;
 }
 
-.fa.fa-thumbs-up.orange {
+.orange {
     color: #FFA500;
+}
+
+.icon-animated:hover .fa-check-circle:before {
+    content: "\f05d";
 }

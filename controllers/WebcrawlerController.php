@@ -10,6 +10,7 @@ use \app\models\Webcrawler;
 use \app\models\User;
 use \solcity\rssparser\Importer;
 use \app\models\WebcrawlerImportLog;
+use \yii\grid\GridView;
 
 class WebcrawlerController extends \yii\web\Controller {
     public function actionImport() {
@@ -19,7 +20,10 @@ class WebcrawlerController extends \yii\web\Controller {
 
     public function actionConfirm() {
         $dataProvider = new ActiveDataProvider([
-            'query' => Article::find()->where(['userId' => User::find()->where("username = 'SOLCITY_RSS_CRAWLER'")->one()->userId, 'released' => 0]),
+            'query' => Article::find()->where(['userId' => User::find()->where("username = '" . Yii::$app->params['rssimport']['user'] . "'")->one()->userId, 'released' => 0]),
+            'pagination' => [
+                'pageSize' => Yii::$app->params['standard']['pagination']['pageSize'],
+            ]
         ]);
 
         return $this->render('confirm', [
@@ -38,7 +42,7 @@ class WebcrawlerController extends \yii\web\Controller {
     }
 
     public function actionRelease($id) {
-        if (Article::find()->where('articleId = :articleId', ['articleId' => $id])->one()->release()) {
+        if (Article::findOne($id)->release()) {
             return $this->redirect(['confirm']);
         } else {
             //die('asdf');
@@ -108,8 +112,38 @@ class WebcrawlerController extends \yii\web\Controller {
     }
     
     public function actionReport() {
-        return $this->render('import_state', [
-            'log' => new ActiveDataProvider(['query' => WebcrawlerImportLog::find()->where("DATE(executionTime) = CURDATE()")]),
-        ]);
+        return $this->render('import_state');
+    }
+    
+    public function actionDetaillog() {
+        if (!is_null(Yii::$app->request->post('runNumber'))) {
+            return GridView::widget([
+                'dataProvider' => new ActiveDataProvider([
+                    'query' => WebcrawlerImportLog::find()->where(['runNumber' => Yii::$app->request->post('runNumber')]),
+                    'pagination' => false,
+                ]),
+                'layout' => "{items}",
+                'columns' => [
+                    'state:html',
+                    'runNumber',
+                    'executionTime',
+                    'articleId',
+                    'article.originLink:url',
+                    'message',
+                ],
+            ]);
+        } else {
+            return '';
+        }
+    }
+    
+    public function actionDeletearticle($id) {
+        $logs = WebcrawlerImportLog::find()->where(['articleId' => $id])->all();
+        foreach ($logs as $log) {
+            $log->delete();
+        }
+        
+        Article::findOne($id)->delete();
+        return $this->redirect(['confirm']);
     }
 }

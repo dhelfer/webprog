@@ -44,3 +44,5 @@ if new version is online:
 - php composer.phar update
 use webcrawler as follows:
 - boolean $importStatus = \solcity\rssparser\Importer::widget(['options' => ['action' => 'import']]);
+the webcrawler can be started from command line:
+- yii.bat webcrawlercmd/import

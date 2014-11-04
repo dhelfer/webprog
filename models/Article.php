@@ -101,7 +101,8 @@ class Article extends \yii\db\ActiveRecord {
     }
     
     public function getReleaseLink() {
-        return Html::a('release ' . $this->articleId, 'index.php?r=webcrawler/release&id=' . $this->articleId);
+        return Html::a(
+            '<i class="fa fa-check-circle fa-2x green"></i>', 'index.php?r=webcrawler/release&id=' . $this->articleId, ['class' => 'icon-animated']);
     }
 
     public function getShortArticle(){

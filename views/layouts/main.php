@@ -64,6 +64,7 @@ AppAsset::register($this);
                     'items' => [
                         ['label' => 'Neuen Artikel erfassen', 'url' => 'index.php?r=article/create'],
                         ['label' => 'RSS Feeds verwalten', 'url' => 'index.php?r=webcrawler/index'],
+                        ['label' => 'RSS Import Status', 'url' => 'index.php?r=webcrawler/report'],
                         ['label' => 'RSS-Artikel freigeben', 'url' => 'index.php?r=webcrawler/confirm'],
                     ],
                 ]);

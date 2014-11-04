@@ -15,21 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'summary' => Yii::$app->params['text']['gridview']['summary'],
         'columns' => [
             'articleId',
-            'title:ntext',
-            'article:ntext',
-            'originLink:ntext',
+            'title',
+            'article',
             [
                 'attribute' => 'releaseLink',
                 'format' => 'raw',
-                'value' => function ($model, $key, $index) { 
-                    return $model->releaseLink;
-                },
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {delete}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $model->originLink);
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', 'index.php?r=webcrawler/deletearticle&id=' . $key);
+                    },
+                ]
             ],
         ],
     ]); ?>
