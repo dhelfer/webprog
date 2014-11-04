@@ -27,7 +27,15 @@ $this->title = 'SolCity';
                     
                     <div class="panel-footer panel-footer-extra inArticleFoot">
                     <?php if( $article->showReadMore() ): ?>
-                        <p class="readMore"><a class="btn btn-default" href="<?php echo $_SERVER['PHP_SELF'] ?>?r=article/view&id=<?php echo $article->articleId ?>">Weiterlesen</a></p>
+                        <?php if (!empty($article->originLink)): ?>
+                        <p class="readMore">
+                            <?= $article->buildOriginLinkAsHtml('Kompletten Artikel lesen', ['class' => 'btn btn-default', 'target' => '_blank']); ?>
+                        </p>
+                        <?php else: ?>
+                        <p class="readMore">
+                            <?= $article->buildArticleDetailLinkAsHtml('Weiterlesen', ['class' => 'btn btn-default']); ?>
+                        </p>
+                        <?php endif; ?>
                     <?php endif; ?>
                      </div>
                 </div>

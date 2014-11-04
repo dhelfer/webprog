@@ -116,14 +116,18 @@ class Article extends \yii\db\ActiveRecord {
     }
     
     public function showReadMore(){
-        if(strlen($this->article) > self::ARTICLELEN){
-            return true;
-        } else {
-            return false;
-        }
+        return strlen($this->article) > self::ARTICLELEN || !empty($this->originLink);
     }
     
-    public function getDuplicateByOriginlink() {
+    public function findDuplicateByOriginlink() {
         return Article::find()->where(['originLink' => $this->originLink])->one();
+    }
+    
+    public function buildOriginLinkAsHtml($text, $options = []) {
+        return Html::a($text, $this->originLink, $options);
+    }
+    
+    public function buildArticleDetailLinkAsHtml($text, $options = []) {
+        return Html::a($text, 'index.php?r=article/view&id=' . $this->articleId, $options);
     }
 }
