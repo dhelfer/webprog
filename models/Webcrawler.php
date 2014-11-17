@@ -11,9 +11,11 @@ use \yii\helpers\Html;
  * @property string $link
  * @property integer $categoryId
  * @property integer $subCategoryId
+ * @property string $specialMapping 
  *
  * @property Category $category
  * @property Subcategory $subCategory
+ * @property WebcrawlerImportLog[] $webcrawlerImportLogs 
  */
 class Webcrawler extends \yii\db\ActiveRecord {
 
@@ -30,7 +32,7 @@ class Webcrawler extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['link'], 'required'],
-            [['link'], 'string'],
+            [['link', 'specialMapping'], 'string'],
             [['categoryId', 'subCategoryId'], 'integer']
         ];
     }
@@ -44,6 +46,7 @@ class Webcrawler extends \yii\db\ActiveRecord {
             'link' => 'Link',
             'categoryId' => 'Category ID',
             'subCategoryId' => 'Sub Category ID',
+            'specialMapping' => 'Special Mapping',
         ];
     }
 
@@ -60,4 +63,12 @@ class Webcrawler extends \yii\db\ActiveRecord {
     public function getSubCategory() {
         return $this->hasOne(Subcategory::className(), ['subCategoryId' => 'subCategoryId']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getWebcrawlerImportLogs() {
+        return $this->hasMany(WebcrawlerImportLog::className(), ['webcrawlerId' => 'webcrawlerId']);
+    }
+
 }

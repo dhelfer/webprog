@@ -14,7 +14,12 @@ use \yii\grid\GridView;
 
 class WebcrawlerController extends \yii\web\Controller {
     public function actionImport() {
-        $state = Importer::widget(['options' => ['action' => 'import']]);
+        $state = Importer::widget([
+            'options' => [
+                'action' => 'import',
+                'json' => true,
+            ]
+        ]);
         $this->redirect('index.php?r=webcrawler/report');
     }
 
@@ -74,7 +79,7 @@ class WebcrawlerController extends \yii\web\Controller {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
@@ -145,5 +150,44 @@ class WebcrawlerController extends \yii\web\Controller {
         
         Article::findOne($id)->delete();
         return $this->redirect(['confirm']);
+    }
+    
+    public function actionFeeditemstructure() {
+        if (!empty(Yii::$app->request->post('feedUrl'))) {
+            try {
+                $item = Importer::widget([
+                    'options' => [
+                        'action' => 'getItemStructure',
+                        'url' => Yii::$app->request->post('feedUrl'),
+                        'json' => true
+                    ]
+                ]);
+
+                $articleAttributes = Article::rssRelevantAttributes();
+                $htmlAA = '<table class="table-feeditemstructure"><tr>';
+                foreach ($articleAttributes as $articleAttribute) {
+                    $htmlAA .= '<td><div id="' . $articleAttribute . '" ondrop="drop(event)" ondragover="allowDrop(event)">' . $articleAttribute . '</div></td>';
+                }
+                $htmlAA .= '</tr></table>';
+
+                $itemAttributes = json_decode($item, true);
+                $htmlIA = '<table class="table-feeditemstructure table-feeditemstructure-draggable"><tr>';
+                foreach ($itemAttributes as $itemAttribute) {
+                    $htmlIA .= '<td><div id="' . $itemAttribute . '" draggable="true" ondragstart="drag(event)">' . $itemAttribute . '</div></td>';
+                }
+                $htmlIA .= '</tr></table>';
+
+                $default = '<b>Default Mapping:</b><br>';
+                $default .= 'article->title = rss->title<br>';
+                $default .= 'article->article = rss->description<br>';
+                $default .= 'article->originLink = rss->link<br><br>';
+
+                return '<div class="panel panel-default"><div class="panel-body">' . $default . '<br><p><b>Artikel-Attribute</b></p>' . $htmlAA . '<p><b>RSS-Feed-Attribute</b></p>' . $htmlIA . '</div></div>';
+            } catch (Exception $ex) {
+                return 'Fehler beim Laden des RSS-Feeds';
+            }
+        } else {
+            return 'Keine RSS-Feed-Url angegeben';
+        }
     }
 }

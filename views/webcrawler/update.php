@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Webcrawler */
 
-$this->title = 'Update Event: ' . ' ' . $model->webcrawlerId;
+$this->title = 'Update RSS Feed: ' . ' ' . $model->webcrawlerId;
 ?>
 <div class="webcrawler-update">
 

@@ -18,10 +18,10 @@ class WebcrawlerImportLogGroup {
     
     public function __construct() {
         $this->linkToDetailLog = Html::a(
-                'Details',
-                '#',
-                [
-                    'onclick' => 'return asdf("'. \yii\helpers\Url::to('index.php?r=webcrawler/detaillog') . '", ' . $this->runNumber .');',
-                ]);
+            'Details',
+            '#',
+            [
+                'onclick' => 'return loadImportStateDetail("'. \yii\helpers\Url::to('index.php?r=webcrawler/detaillog') . '", ' . $this->runNumber .');',
+            ]);
     }
 }

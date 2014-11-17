@@ -21,7 +21,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
-        'js/ajaxLoadImportStateDetail.js',
+        'js/ajaxWebcrawler.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

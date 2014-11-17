@@ -20,15 +20,8 @@ use yii\helpers\ArrayHelper;
     
     <?= $form->field($model, 'article')->widget(CKEditor::className(), [
         'options' => ['rows' => 6],
-        'preset' => 'basic'
+        'preset' => 'full'
     ]) ?>
-
-<!--    <script type="text/javascript">
-        CKEDITOR.replace( 'editor1', {
-            filebrowserUploadUrl: "upload.php"
-        } );
-       alert("asd");
-    </script>-->
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

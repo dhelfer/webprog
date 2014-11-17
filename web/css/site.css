@@ -176,3 +176,17 @@ div.panel-footer-extra {
 .icon-animated:hover .fa-check-circle:before {
     content: "\f05d";
 }
+
+.table-feeditemstructure td {
+    border: 1px solid lightgray;
+}
+
+.table-feeditemstructure div {
+    margin: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.table-feeditemstructure-draggable div {
+    cursor: pointer;
+}
