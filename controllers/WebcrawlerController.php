@@ -190,4 +190,38 @@ class WebcrawlerController extends \yii\web\Controller {
             return 'Keine RSS-Feed-Url angegeben';
         }
     }
+    
+    public function actionConfirmall() {
+        if (!empty(Yii::$app->request->post('selection'))) {
+            $query = Article::find();
+            foreach (Yii::$app->request->post('selection') as $id) {
+                $query = $query->orWhere(['articleId' => $id]);
+            }
+            $articles = $query->all();
+            foreach ($articles as $article) {
+                if (!$article->release()) {
+                    echo 'failed to release article: ' . $article->articleId . '<br>';
+                    //@todo: log error
+                }
+            }
+        }
+        $this->redirect(['confirm']);
+    }
+    
+    public function actionCrawlall() {
+        if (!empty(Yii::$app->request->post('selection'))) {
+            foreach (Yii::$app->request->post('selection') as $id) {
+                $state = Importer::widget([
+                    'options' => [
+                        'action' => 'import',
+                        'json' => true,
+                        'webcrawlerId' => $id,
+                    ]
+                ]);
+            }
+            $this->redirect(['report']);
+        } else {
+            $this->redirect(['index']);
+        }
+    }
 }

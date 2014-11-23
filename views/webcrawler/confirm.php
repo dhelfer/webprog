@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -12,11 +13,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="article-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    
+    <?php $form = ActiveForm::begin(['action' => 'index.php?r=webcrawler/confirmall']); ?>
+    
+    <?= Html::submitButton('Ausgewählte Artikel veröffentlichen', ['class' => 'btn btn-danger']) ?>
+    
+    <br><br>
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'summary' => Yii::$app->params['text']['gridview']['summary'],
         'columns' => [
+            [
+                'class' => 'yii\grid\CheckboxColumn'
+            ],
             'articleId',
             'title',
             'article',
@@ -38,5 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+    
+    <?php ActiveForm::end(); ?>
 
 </div>
