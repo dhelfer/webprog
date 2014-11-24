@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Comment;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -59,12 +60,21 @@ class ArticleController extends Controller {
         $model = new Article();
         $model->userId = Yii::$app->user->identity->userId;
         $model->released = true;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->articleId]);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if (strpos($model->categoryValue, 'SubCategory') === 0) {
+                $model->subCategoryId = str_replace('SubCategory', '', $model->categoryValue);
+            } else if (strpos($model->categoryValue, 'Category') === 0) {
+                $model->categoryId = str_replace('Category', '', $model->categoryValue);
+            } else {
+                return $this->render('create', ['model' => $model]);
+            }
+            
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->articleId]);
+            }
         } else {
-            return $this->render('create', [
-                        'model' => $model,
-            ]);
+            return $this->render('create', ['model' => $model]);
         }
     }
 
@@ -112,5 +122,18 @@ class ArticleController extends Controller {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
+    
+    public function actionComment() {
+        if (!empty(Yii::$app->request->post('Comment'))) {
+            $model = new Comment();
+            if (!$model->load(Yii::$app->request->post()) || !$model->save()) {
+                return $this->redirect([
+                    'view',
+                    'id' => $model->articleId,
+                    'newComment' => $model,
+                ]);
+            }
+        }
+        return $this->redirect(['view', 'id' => $model->articleId]);
+    }
 }

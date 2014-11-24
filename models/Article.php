@@ -30,6 +30,35 @@ class Article extends \yii\db\ActiveRecord {
 
     const ARTICLELEN = 200;
     
+    private $categoryValue;
+    
+    public function setCategoryValue($categoryValue) {
+        $this->categoryValue = $categoryValue;
+    }
+    
+    public function getCategoryValue() {
+        if (!isset($this->categoryValue)) {
+            if (isset($this->categoryId)) {
+                $this->categoryValue = 'Category' . $this->categoryId;
+            } elseif (isset($this->subCategoryId)) {
+                $this->categoryValue = 'SubCategory' . $this->subCategoryId;
+            } else {
+                $this->categoryValue = null;
+            }
+        }
+        return $this->categoryValue;
+    }
+    
+    public function getCategoryOrSubCategory() {
+        if (isset($this->category)) {
+            return $this->category;
+        } elseif (isset($this->subCategory)) {
+            return $this->subCategory;
+        } else {
+            return null;
+        }
+    }
+    
     public static function rssRelevantAttributes() {
         return [
             'title',
@@ -53,7 +82,7 @@ class Article extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['title', 'article', 'originLink', 'teaserImage'], 'string'],
-            [['userId'], 'required'],
+            [['userId', 'categoryValue'], 'required'],
             [['userId', 'subCategoryId', 'released', 'categoryId'], 'integer'],
             [['dateCreated', 'dateLastUpdated'], 'safe']
         ];
@@ -141,9 +170,9 @@ class Article extends \yii\db\ActiveRecord {
         return substr($this->article, 0, $pos);
     }
 
-    public function showReadMore() {
-        return strlen($this->article) > self::ARTICLELEN || !empty($this->originLink);
-    }
+//    public function showReadMore() {
+//        return strlen($this->article) > self::ARTICLELEN || !empty($this->originLink);
+//    }
 
     public function findDuplicateByOriginlink() {
         return Article::find()->where(['originLink' => $this->originLink])->one();
@@ -156,5 +185,4 @@ class Article extends \yii\db\ActiveRecord {
     public function buildArticleDetailLinkAsHtml($text, $options = []) {
         return Html::a($text, 'index.php?r=article/view&id=' . $this->articleId, $options);
     }
-
 }

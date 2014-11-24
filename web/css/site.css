@@ -190,3 +190,11 @@ div.panel-footer-extra {
 .table-feeditemstructure-draggable div {
     cursor: pointer;
 }
+
+.create-art-select-cat option.parent.hasNoChild {
+    font-weight: bold;
+}
+
+.create-art-select-cat option.child {
+    
+}

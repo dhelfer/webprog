@@ -395,7 +395,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dhelfer/webprog-rssparser.git",
-                "reference": "dfdba22a368e1592bd3130adcf14944f40f919e4"
+                "reference": "c14eda48cae951be04300616e034294c4d12548c"
             },
             "require": {
                 "yiisoft/yii2": "*"
@@ -420,7 +420,7 @@
                 "extension",
                 "yii2"
             ],
-            "time": "2014-11-17 18:42:58"
+            "time": "2014-11-23 18:27:58"
         },
         {
             "name": "swiftmailer/swiftmailer",
