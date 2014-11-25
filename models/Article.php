@@ -185,4 +185,26 @@ class Article extends \yii\db\ActiveRecord {
     public function buildArticleDetailLinkAsHtml($text, $options = []) {
         return Html::a($text, 'index.php?r=article/view&id=' . $this->articleId, $options);
     }
+    
+    public function findPrimaryCategorieValueChoice() {
+        if (is_null($this->getCategoryValue())) {
+            //get most used category from user with awesome select statement
+            /*
+                select		count(articleId) as articleCount, concat('Category', cast(ifnull(categoryId, 0) as char)) as category
+                from		sc_article
+                where		userId = 1
+                group by	categoryId
+                union
+                select		count(articleId) as articleCount, concat('SubCategory', cast(ifnull(subCategoryId, 0) as char)) as category
+                from		sc_article
+                where		userId = 1
+                group by	subCategoryId
+                order by	articleCount desc
+             */
+            $lastArticle = Article::find()->where(['userId' => \Yii::$app->user->id])->orderBy('dateCreated DESC')->one();
+            return $lastArticle->getCategoryValue();
+        } else {
+            return $this->categoryValue;
+        }
+    }
 }

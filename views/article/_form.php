@@ -18,6 +18,7 @@ use dosamigos\ckeditor\CKEditor;
     <?= ''//$form->field($model, 'subCategoryId')->dropDownList(ArrayHelper::map(app\models\Subcategory::find()->all(), 'subCategoryId', 'name'), ['prompt' => 'a'])  ?>
     
     <div class="form-group field-article-categoryValue">
+        <?php $primaryCategorieValueChoice = $model->findPrimaryCategorieValueChoice(); ?>
         <label class="control-label" for="article-categoryValue">Kategorie</label>
         <select id="article-categoryValue" class="form-control create-art-select-cat" name="Article[categoryValue]">
         <?php if (!isset($model->categoryValue)): ?>
@@ -28,10 +29,12 @@ use dosamigos\ckeditor\CKEditor;
             <?php if (count($cat->subcategories) > 0): ?>
                 <optgroup label="<?= $cat->name ?>" value="<?= 'Category' . $cat->categoryId ?>">
             <?php else: ?>
-                <option class="parent hasNoChild" value="<?=  'Category' . $cat->categoryId ?>"><?=$cat->name ?></option>
+                <option class="parent hasNoChild" value="<?=  'Category' . $cat->categoryId ?>"
+                    <?= $primaryCategorieValueChoice == 'Category' . $cat->categoryId ? 'selected' : '' ?>><?=$cat->name ?></option>
             <?php endif; ?>
             <?php foreach ($cat->subcategories as $subcat): ?>
-                <option class="child" value="<?= 'SubCategory' . $subcat->subCategoryId ?>"><?= $subcat->name ?></option>
+                <option class="child" value="<?= 'SubCategory' . $subcat->subCategoryId ?>"
+                        <?= $primaryCategorieValueChoice == 'SubCategory' . $subcat->subCategoryId ? 'selected' : '' ?>><?= $subcat->name ?></option>
             <?php endforeach; ?>
             <?php if (count($cat->subcategories) > 0): ?>
                 </optgroup>
