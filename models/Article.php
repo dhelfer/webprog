@@ -202,7 +202,11 @@ class Article extends \yii\db\ActiveRecord {
                 order by	articleCount desc
              */
             $lastArticle = Article::find()->where(['userId' => \Yii::$app->user->id])->orderBy('dateCreated DESC')->one();
-            return $lastArticle->getCategoryValue();
+            if ($lastArticle) {
+                return $lastArticle->getCategoryValue();
+            } else {
+                return null;
+            }
         } else {
             return $this->categoryValue;
         }
