@@ -20,8 +20,7 @@ AppAsset::register($this);
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
-<?php $this->head() ?>
-        <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
+        <?php $this->head() ?>
     </head>
     <body>
             <?php $this->beginBody() ?>

@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\ckeditor\CKEditor;
+use \yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Article */
@@ -10,7 +12,20 @@ use dosamigos\ckeditor\CKEditor;
 ?>
 
 <div class="article-form">
-
+    <?= Html::button(
+        'create',
+        ['value' => Url::to(['article/preview']),
+            'id' => 'modalButton',
+        ]) ?>
+ 
+ 
+    <?php
+    Modal::begin([
+        'id' => 'modal'
+    ]);
+    echo "<div id='modalContent'></div>";
+    Modal::end();
+    ?>
     <?php $form = ActiveForm::begin(); ?>
     
     <?= $form->field($model, 'title')->textInput() ?>

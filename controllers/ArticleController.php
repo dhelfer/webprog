@@ -136,4 +136,21 @@ class ArticleController extends Controller {
         }
         return $this->redirect(['view', 'id' => $model->articleId]);
     }
+    
+    public function actionPreview() {
+        /*$model = new Category;
+ 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->refresh();
+            Yii::$app->response->format = 'json';
+            return [
+                'message' => 'Success!!!',
+            ];
+        }*/
+        return 'asdf';
+        $model = Article::findOne(1);
+        return $this->renderAjax('view', [
+            'model' => $model,
+        ]);
+    }
 }
