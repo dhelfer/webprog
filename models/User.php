@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -14,7 +12,10 @@ use Yii;
  * @property string $lastName
  * @property string $email
  * @property integer $imageId
+ * @property string $accessToken
  * @property string $salt
+ * @property string $activationKey
+ * @property integer $active
  *
  * @property Article[] $articles
  * @property Comment[] $comments
@@ -24,6 +25,7 @@ use Yii;
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 
     public $authKey = 'asdf';
+    public $password2;
 
     /**
      * @inheritdoc
@@ -37,11 +39,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
      */
     public function rules() {
         return [
-            [['userName', 'password'], 'required'],
+            [['userName', 'password', 'password2', 'email'], 'required'],
             [['imageId'], 'integer'],
             [['userName'], 'string', 'max' => 100],
-            [['password'], 'string', 'max' => 128],
-            [['firstName', 'lastName', 'email'], 'string', 'max' => 255]
+            [['password', 'password2'], 'string', 'max' => 128],
+            [['firstName', 'lastName', 'email'], 'string', 'max' => 255],
+            [['password2'], 'compare', 'compareAttribute' => 'password', 'operator' => '=='],
         ];
     }
 
@@ -57,6 +60,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             'lastName' => 'Last Name',
             'email' => 'Email',
             'imageId' => 'Image ID',
+            'accessToken' => 'Access Token',
+            'salt' => 'Salt',
+            'activationKey' => 'Activation Key',
+            'active' => 'Active',
         ];
     }
 
@@ -115,7 +122,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
      * @return User|null
      */
     public static function findByUsername($username) {
-        return self::find()->where(['userName' => $username])->one();
+        return self::findByUsernameAndActive($username, 1);
     }
 
     /**
@@ -134,7 +141,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
     }
     
     public function createActivationKey() {
-        $key = hash('sha512', uniqid(rand(1, getrandmax()), true));
+        $this->activationKey = hash('sha512', uniqid(rand(1, getrandmax()), true));
         
     }
     
@@ -148,7 +155,18 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         
         if ($insert) {
             $this->saltPassword();
+            $this->createActivationKey();
         }
-        return !empty($this->salt) && strlen($this->password) == 128;
+        return !empty($this->salt) && strlen($this->password) == 128 && !empty($this->activationKey);
+    }
+    
+    public static function findByUsernameAndActive($username, $active) {
+        return self::find()->where(['userName' => $username, 'active' => $active])->one();
+    }
+    
+    public function activate() {
+        $this->active = 1;
+        $this->activationKey = '-';
+        return $this->save(false);
     }
 }

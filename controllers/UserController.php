@@ -59,11 +59,22 @@ class UserController extends Controller {
         $model = new User();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->userId]);
+            //return $this->redirect(['view', 'id' => $model->userId]);
+            
+            $messageLines = Yii::$app->params['mail']['message'];
+            $messageLines[1] = str_replace('{activationkey}', $model->activationKey, str_replace('{username}', $model->userName, $messageLines[1]));
+            
+            $activationMailSent = Yii::$app->mailer->compose()
+                ->setTo($model->email)
+                ->setFrom([Yii::$app->params['mail']['fromAddress'] => Yii::$app->params['mail']['fromName']])
+                ->setSubject(Yii::$app->params['mail']['subject'])
+                ->setTextBody($messageLines[0] . ': ' . $messageLines[1])
+                ->setHtmlBody($messageLines[0] . '<br><a href="' . $messageLines[1] . '">' . $messageLines[1] . '</a>')
+                ->send();
+            
+            return $this->render('activate', ['activationMailSent' => $activationMailSent]);
         } else {
-            return $this->render('create', [
-                        'model' => $model,
-            ]);
+            return $this->render('create', ['model' => $model]);
         }
     }
 
@@ -111,5 +122,17 @@ class UserController extends Controller {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
+    
+    public function actionActivate($user, $activationkey) {
+        $userObject = User::findByUsernameAndActive($user, 0);
+        if ($userObject->activationKey === $activationkey) {
+            if ($userObject->activate()) {
+                return $this->render('activate', ['activationDone' => true, 'user' => $user]);
+            } else {
+                return $this->render('activate', ['activationDone' => false]);
+            }
+        } else {
+            return $this->render('activate', ['activationDone' => false]);
+        }
+    }
 }

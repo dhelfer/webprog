@@ -14,15 +14,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'userName')->textInput(['maxlength' => 100]) ?>
 
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => 64]) ?>
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => 128]) ?>
+    
+    <?= $form->field($model, 'password2')->passwordInput(['maxlength' => 128]) ?>
 
     <?= $form->field($model, 'firstName')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'lastName')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'imageId')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
