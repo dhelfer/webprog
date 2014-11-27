@@ -14,6 +14,7 @@ use Yii;
  * @property string $lastName
  * @property string $email
  * @property integer $imageId
+ * @property string $salt
  *
  * @property Article[] $articles
  * @property Comment[] $comments
@@ -39,7 +40,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             [['userName', 'password'], 'required'],
             [['imageId'], 'integer'],
             [['userName'], 'string', 'max' => 100],
-            [['password'], 'string', 'max' => 64],
+            [['password'], 'string', 'max' => 128],
             [['firstName', 'lastName', 'email'], 'string', 'max' => 255]
         ];
     }
@@ -124,10 +125,30 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
      * @return boolean if password provided is valid for current user
      */
     public function validatePassword($password) {
-        return $this->password === md5($password);
+        $hash = hash('sha512', $password . $this->salt);
+        return $hash === $this->password;
     }
     
     public function getFullname() {
         return $this->firstName . ' ' . $this->lastName;
+    }
+    
+    public function createActivationKey() {
+        $key = hash('sha512', uniqid(rand(1, getrandmax()), true));
+        
+    }
+    
+    private function saltPassword() {
+        $this->salt = hash('sha512', uniqid(rand(1, getrandmax()), true));
+        $this->password = hash('sha512', $this->password . $this->salt);
+    }
+    
+    public function beforeSave($insert) {
+        parent::beforeSave($insert);
+        
+        if ($insert) {
+            $this->saltPassword();
+        }
+        return !empty($this->salt) && strlen($this->password) == 128;
     }
 }
