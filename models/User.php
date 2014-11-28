@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use \yii\db\Expression;
+
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -16,6 +18,7 @@ namespace app\models;
  * @property string $salt
  * @property string $activationKey
  * @property integer $active
+ * @property string $passwordResetKey
  *
  * @property Article[] $articles
  * @property Comment[] $comments
@@ -26,6 +29,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 
     public $authKey = 'asdf';
     public $password2;
+    public $passwordResetKeyCheck;
 
     /**
      * @inheritdoc
@@ -45,6 +49,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             [['password', 'password2'], 'string', 'max' => 128],
             [['firstName', 'lastName', 'email'], 'string', 'max' => 255],
             [['password2'], 'compare', 'compareAttribute' => 'password', 'operator' => '=='],
+            [['userName'], 'unique'],
+            [['email'], 'unique'],
         ];
     }
 
@@ -64,6 +70,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             'salt' => 'Salt',
             'activationKey' => 'Activation Key',
             'active' => 'Active',
+            'passwordResetKey' => 'Password Reset Key',
         ];
     }
 
@@ -140,12 +147,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         return $this->firstName . ' ' . $this->lastName;
     }
     
-    public function createActivationKey() {
-        $this->activationKey = hash('sha512', uniqid(rand(1, getrandmax()), true));
-        
+    public function createKey() {
+        return hash('sha512', uniqid(rand(1, getrandmax()), true));
     }
     
-    private function saltPassword() {
+    public function saltPassword() {
         $this->salt = hash('sha512', uniqid(rand(1, getrandmax()), true));
         $this->password = hash('sha512', $this->password . $this->salt);
     }
@@ -155,7 +161,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         
         if ($insert) {
             $this->saltPassword();
-            $this->createActivationKey();
+            $this->activationKey = $this->createKey();
         }
         return !empty($this->salt) && strlen($this->password) == 128 && !empty($this->activationKey);
     }
@@ -166,7 +172,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
     
     public function activate() {
         $this->active = 1;
-        $this->activationKey = '-';
+        $this->activationKey = new Expression('null');
         return $this->save(false);
     }
 }

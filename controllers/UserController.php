@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use \yii\helpers\Html;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -133,6 +134,66 @@ class UserController extends Controller {
             }
         } else {
             return $this->render('activate', ['activationDone' => false]);
+        }
+    }
+    
+    public function actionReset($user = null, $passwordResetKey = null) {
+        if (Yii::$app->getRequest()->isPost) {
+            $post = Yii::$app->getRequest()->post('User');
+            
+            if (isset($post['passwordResetKeyCheck'])) {
+                $userObject = User::findOne($post['userId']);
+                if ($userObject->passwordResetKey === $post['passwordResetKeyCheck']) {
+                    $userObject->password = $post['password'];
+                    $userObject->saltPassword();
+                    if ($userObject->save(false)) {
+                        return $this->render('resetted', ['message' => '<p>Ihr Password wurde erfolgreich geändert.</p>' . Html::a('Login', 'index.php?r=site/login&user=' . $userObject->userName)]);
+                    } else {
+                        return $this->render('resetted', ['message' => 'Interner Server Error.']);
+                    }
+                } else {
+                    return $this->render('resetted', ['message' => 'Der Resetcode ist falsch oder abgelaufen..']);
+                }
+            } else {
+                if (isset($post['userName'])) {
+                    $userObject = User::findByUsername($post['userName']);
+                    $userObject->passwordResetKey = $userObject->createKey();
+                    $userObject->activationKey = \yii\db\Expression::className('null');
+                    
+                    if ($userObject->save(false)) {
+                        $messageLines = Yii::$app->params['mail']['resetMessage'];
+                        $messageLines[1] = str_replace('{passwordResetKey}', $userObject->passwordResetKey, str_replace('{username}', $userObject->userName, $messageLines[1]));
+
+                        $activationMailSent = Yii::$app->mailer->compose()
+                            ->setTo($userObject->email)
+                            ->setFrom([Yii::$app->params['mail']['fromAddress'] => Yii::$app->params['mail']['fromName']])
+                            ->setSubject(Yii::$app->params['mail']['resetSubject'])
+                            ->setTextBody($messageLines[0] . ': ' . $messageLines[1])
+                            ->setHtmlBody($messageLines[0] . '<br><a href="' . $messageLines[1] . '">' . $messageLines[1] . '</a>')
+                            ->send();
+                        
+                        if ($activationMailSent) {
+                            return $this->render('resetted', ['message' => 'Eine Email mit einem Link, um Ihr Passwort zurückzusetzen, wurde an Sie versandt.']);
+                        } else {
+                            return $this->render('resetted', ['message' => 'Die Email mit einem Link, um Ihr Passwort zurückzusetzen, konnte nicht versandt werden.']);
+                        }
+                    } else {
+                        return $this->render('resetted', ['message' => 'Interner Server Error.']);
+                    }
+                }
+            }
+        } else {
+            if (!is_null($user) && !is_null($passwordResetKey)) {
+                $userObject = User::findByUsername($user);
+                if ($userObject->passwordResetKey === $passwordResetKey) {
+                    $userObject->password = null;
+                    return $this->render('reset', ['model' => $userObject, 'passwordResetKey' => $passwordResetKey]);
+                } else {
+                    return $this->render('reset');
+                }
+            } else {
+                return $this->render('reset');
+            }
         }
     }
 }

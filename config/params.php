@@ -23,5 +23,10 @@ return [
             'Klicken Sie auf den folgenden Link oder kopieren Sie ihn in die Adresszeile Ihres Browsers',
             'http://localhost/webprog/web/index.php?r=user/activate&user={username}&activationkey={activationkey}',
         ],
+        'resetSubject' => 'Setzen Sie Ihr Password bei Solcity zurück',
+        'resetMessage' => [
+            'Klicken Sie auf den folgenden Link oder kopieren Sie ihn in die Adresszeile Ihres Browsers',
+            'http://localhost/webprog/web/index.php?r=user/reset&user={username}&passwordResetKey={passwordResetKey}',
+        ],
     ]
 ];

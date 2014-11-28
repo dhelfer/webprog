@@ -2,12 +2,12 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $model app\models\LoginForm */
 
 $this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -38,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?php ActiveForm::end(); ?>
-
-    <div class="col-lg-offset-1" style="color:#999;">
-        <?= Html::a('Registrieren', 'index.php?r=user/create') ?>
+    <div class="col-lg-offset-1">
+        <p><?= Html::a('Registrieren', 'index.php?r=user/create') ?></p>
+        <p><?= Html::a('Password vergessen', 'index.php?r=user/reset') ?></p>
     </div>
 </div>
