@@ -3,6 +3,14 @@ body {
     height: 100%;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: #4863A0;
+}
+
 .wrap {
     min-height: 100%;
     height: auto;
@@ -90,6 +98,9 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
+/*
+    menu
+*/
 .solcity-menu {
     background-color: #4863A0;
     font-weight: bold;
@@ -121,44 +132,65 @@ a.desc:after {
     background-color: #4863A0;
 }
 
+.solcity-menu .navbar-header .navbar-toggle .icon-bar {
+    background-color: #FFFFFF;
+}
+
+/*
+    article
+*/
 p.readMore {
     text-align: right;
-    padding-right: 10px;
+    color: #4863A0;
 }
 
-div#featArticle {
-    /*height: 300px;*/
+div.singleArticle {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: 20px;
 }
 
-div.inArticle {
-    border: 2px solid #4863A0; 
-    border-radius: 15px;
-    -moz-border-radius: 15px;
+div.singleArticle .author {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: -10px;
+    left: -10px;
 }
 
-div.inArticleHead {
-    -moz-border-top-left-radius: 15px;
-    -moz-border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    min-height: 100px;
-
+div.singleArticle .author img {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
 }
 
-div.inArticleFoot {
-    -moz-border-bottom-left-radius: 15px;
-    -moz-border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+div.singleArticle .panel .panel-heading {
+    padding: 0px;
 }
 
-div.panel-body-extra {
-    min-height: 110px;
+div.singleArticle .panel .panel-heading .teaser-image {
+    width: 100%
+}
+
+div.singleArticle .panel .panel-body {
+    height: 200px;
     overflow: hidden;
 }
 
-div.panel-footer-extra {
-   min-height: 60px;
+div.singleArticle .panel .panel-body .meta {
+    font-size: 75%;
+}
+
+div.singleArticle .panel .panel-body .title {
+    font-size: 150%;
+    font-weight: bold;
+}
+
+div.singleArticle .panel .panel-footer {
+    height: 25px;
+    line-height: 25px;
+    padding: 0px;
+    padding-right: 10px;
 }
 
 .green {

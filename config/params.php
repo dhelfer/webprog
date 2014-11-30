@@ -28,5 +28,15 @@ return [
             'Klicken Sie auf den folgenden Link oder kopieren Sie ihn in die Adresszeile Ihres Browsers',
             'http://localhost/webprog/web/index.php?r=user/reset&user={username}&passwordResetKey={passwordResetKey}',
         ],
-    ]
+    ],
+    'resources' => [
+        'default' => [
+            'user' => [
+                'avatar' => 'images/upload/avatars/0.jpg',
+            ],
+            'article' => [
+                'teaser_image' => 'images/upload/articles/0/teaser.jpg',
+            ],
+        ],
+    ],
 ];

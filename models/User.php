@@ -175,4 +175,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         $this->activationKey = new Expression('null');
         return $this->save(false);
     }
+    
+    public function getAvatarImage() {
+        if (!empty($this->image)) {
+            return $this->image->physicalPath;
+        } else {
+            return \Yii::$app->params['resources']['default']['user']['avatar'];
+        }
+    }
 }

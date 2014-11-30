@@ -155,8 +155,7 @@ class Article extends \yii\db\ActiveRecord {
     }
 
     public function getReleaseLink() {
-        return Html::a(
-                        '<i class="fa fa-check-circle fa-2x green"></i>', 'index.php?r=webcrawler/release&id=' . $this->articleId, ['class' => 'icon-animated']);
+        return Html::a('<i class="fa fa-check-circle fa-2x green"></i>', 'index.php?r=webcrawler/release&id=' . $this->articleId, ['class' => 'icon-animated']);
     }
 
     public function getShortArticle() {
@@ -210,5 +209,30 @@ class Article extends \yii\db\ActiveRecord {
         } else {
             return $this->categoryValue;
         }
+    }
+    
+    public function getTeaserImage() {
+        if (!empty($this->teaserImage)) {
+            $image = Image::findOne($this->teaserImage);
+            if ($image) {
+                return $image->physicalPath;
+            } else {
+                return \Yii::$app->params['resources']['default']['article']['teaser_image'];
+            }
+        } else {
+            return \Yii::$app->params['resources']['default']['article']['teaser_image'];
+        }
+    }
+    
+    public function getViewDetailLink() {
+        if (!empty($this->originLink)) {
+            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $this->originLink, ['class' => 'icon-animated', 'target' => '_blank']);
+        } else {
+            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','index.php?r=article/view&id=' . $this->articleId, ['class' => 'icon-animated']);
+        }
+    }
+    
+    public function getUpdateLink() {
+        return Html::a('<span class="glyphicon glyphicon-pencil"></span>','index.php?r=article/update&id=' . $this->articleId, ['class' => 'icon-animated']);
     }
 }

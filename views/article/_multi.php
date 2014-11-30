@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $model app\models\Article */
 ?>
@@ -14,24 +14,33 @@ use yii\helpers\Html;
     if(count($articles) > 0):
     foreach ($articles as $article):
 ?>   
-    <div class=" col-lg-6" id="featArticle">
+    <div class="col-lg-5 singleArticle">
+        <div class="author">
+            <a href="<?= Url::to(['user/view', 'id' => $article->userId]) ?>">
+                <img src="<?= $article->user->getAvatarImage() ?>" alt="Autor">
+            </a>
+        </div>
         <div class="panel panel-default inArticle">
-            <div class="panel-heading inArticleHead" >
-                <h3><?php echo $article->title; ?></h3>
+            <div class="panel-heading" >
+                <img class="teaser-image" src="<?= $article->getTeaserImage() ?>" alt="Titelbild des Artikels">
             </div>
 
-            <div class="panel-body panel-body-extra">
-                <p><?php echo $article->shortArticle; ?></p>
+            <div class="panel-body">
+                <p class="meta"><?= Yii::$app->formatter->asDatetime($article->dateCreated, 'php:d.m.Y H:i') ?></p>
+                <p class="title"><?= $article->title; ?></p>
+                <p><?= $article->shortArticle; ?></p>
             </div>
 
-            <div class="panel-footer panel-footer-extra inArticleFoot">
+            <div class="panel-footer">
                 <?php if (!empty($article->originLink)): ?>
                 <p class="readMore">
-                    <?= $article->buildOriginLinkAsHtml('Zum Original-Artikel', ['class' => 'btn btn-default', 'target' => '_blank']); ?>
+                    <?= $article->buildOriginLinkAsHtml('Zum Original-Artikel', ['target' => '_blank']); ?>
+                    <i class="fa fa-chevron-right"></i>
                 </p>
                 <?php else: ?>
                 <p class="readMore">
-                    <?= $article->buildArticleDetailLinkAsHtml('Zum Artikel', ['class' => 'btn btn-default']); ?>
+                    <?= $article->buildArticleDetailLinkAsHtml('Zum Artikel'); ?>
+                    <i class="fa fa-chevron-right"></i>
                 </p>
                 <?php endif; ?>
              </div>

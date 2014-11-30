@@ -58,6 +58,7 @@ AppAsset::register($this);
                     'items' => $items,
                 ]);
             } else {
+                //@todo: show webcrawler-menu only if rss-user is logged in
                 echo Nav::widget([
                     'options' => ['class' => 'navbar-nav navbar'],
                     'items' => [
