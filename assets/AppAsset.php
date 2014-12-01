@@ -23,7 +23,6 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/ajaxWebcrawler.js',
-        'js/articlePreview.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

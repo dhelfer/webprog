@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Comment;
+use \app\models\ArticlePreview;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -56,25 +57,47 @@ class ArticleController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
-        $model = new Article();
-        $model->userId = Yii::$app->user->identity->userId;
-        $model->released = true;
+    public function actionCreate($id = null) {
+        $post = Yii::$app->request->post();
         
-        if ($model->load(Yii::$app->request->post())) {
-            if (strpos($model->categoryValue, 'SubCategory') === 0) {
-                $model->subCategoryId = str_replace('SubCategory', '', $model->categoryValue);
-            } else if (strpos($model->categoryValue, 'Category') === 0) {
-                $model->categoryId = str_replace('Category', '', $model->categoryValue);
+        if (isset($post['article_preview'])) {
+            if (!empty($id)) {
+                $model = ArticlePreview::findOne($id);
+            } else {
+                $model = new ArticlePreview();
+            }
+            $model->title = $post['Article']['title'];
+            $model->article = $post['Article']['article'];
+            $model->userId = Yii::$app->user->identity->userId;
+            if ($model->save()) {
+                return $this->render('preview', ['model' => $model]);
+            }
+        } else {
+            $model = new Article();
+            $model->userId = Yii::$app->user->identity->userId;
+            $model->released = true;
+            
+            if (!empty($id)) {
+                $preview = ArticlePreview::findOne($id);
+                $model->title = $preview->title;
+                $model->article = $preview->article;
+            }
+            
+            if ($model->load($post)) {
+                if (strpos($model->categoryValue, 'SubCategory') === 0) {
+                    $model->subCategoryId = str_replace('SubCategory', '', $model->categoryValue);
+                } else if (strpos($model->categoryValue, 'Category') === 0) {
+                    $model->categoryId = str_replace('Category', '', $model->categoryValue);
+                } else {
+                    return $this->render('create', ['model' => $model]);
+                }
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->articleId]);
+                }
             } else {
                 return $this->render('create', ['model' => $model]);
             }
-            
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->articleId]);
-            }
-        } else {
-            return $this->render('create', ['model' => $model]);
         }
     }
 
@@ -135,22 +158,5 @@ class ArticleController extends Controller {
             }
         }
         return $this->redirect(['view', 'id' => $model->articleId]);
-    }
-    
-    public function actionPreview() {
-        /*$model = new Category;
- 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->refresh();
-            Yii::$app->response->format = 'json';
-            return [
-                'message' => 'Success!!!',
-            ];
-        }*/
-        return 'asdf';
-        $model = Article::findOne(1);
-        return $this->renderAjax('view', [
-            'model' => $model,
-        ]);
     }
 }

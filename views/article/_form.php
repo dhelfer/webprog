@@ -12,20 +12,6 @@ use yii\bootstrap\Modal;
 ?>
 
 <div class="article-form">
-    <?= Html::button(
-        'create',
-        ['value' => Url::to(['article/preview']),
-            'id' => 'modalButton',
-        ]) ?>
- 
- 
-    <?php
-    Modal::begin([
-        'id' => 'modal'
-    ]);
-    echo "<div id='modalContent'></div>";
-    Modal::end();
-    ?>
     <?php $form = ActiveForm::begin(); ?>
     
     <?= $form->field($model, 'title')->textInput() ?>
@@ -64,7 +50,8 @@ use yii\bootstrap\Modal;
     ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['name' => 'article_create', 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Vorschau', ['name' => 'article_preview', 'class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
