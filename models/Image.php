@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+use \Yii;
+use \yii\base\Exception;
 
 /**
  * This is the model class for table "{{%image}}".
@@ -18,6 +19,7 @@ use Yii;
  * @property User[] $users
  */
 class Image extends \yii\db\ActiveRecord {
+    public $file;
 
     /**
      * @inheritdoc
@@ -33,7 +35,8 @@ class Image extends \yii\db\ActiveRecord {
         return [
             [['physicalPath'], 'required'],
             [['physicalPath', 'alternativeText'], 'string'],
-            [['articleId', 'eventId'], 'integer']
+            [['articleId', 'eventId'], 'integer'],
+            [['file'], 'file'],
         ];
     }
 
@@ -70,5 +73,34 @@ class Image extends \yii\db\ActiveRecord {
     public function getUsers() {
         return $this->hasMany(User::className(), ['imageId' => 'imageId']);
     }
-
+    
+    public function crop($desiredAaspectRatio, $targetPath) {
+        try {
+            $originImage = imagecreatefromjpeg(Yii::$app->params['resources']['path']['temp-upload'] . $this->physicalPath);
+            $originImageSize = getimagesize(Yii::$app->params['resources']['path']['temp-upload'] . $this->physicalPath);
+            $originImageSizeX = $originImageSize[0];
+            $originImageSizeY = $originImageSize[1];
+            
+            if ($originImageSizeX / $originImageSizeY != $desiredAaspectRatio) {
+                $newImageSizeX = $originImageSizeX;
+                $newImageSizeY = $originImageSizeY;
+                if ($originImageSizeX / $originImageSizeY > $desiredAaspectRatio) {
+                    $newImageSizeX = $originImageSizeY * $desiredAaspectRatio;
+                } else {
+                    $newImageSizeY = $originImageSizeX / $desiredAaspectRatio;
+                }
+                
+                $newImage = imagecreatetruecolor($newImageSizeX, $newImageSizeY);
+                imagecopy($newImage, $originImage, 0, 0, 0, 0, $originImageSizeX, $originImageSizeY);
+                
+                header('Content-Type: image/jpeg');
+                $this->physicalPath = $targetPath . hash('sha256', time() . $this->physicalPath) . '.jpeg';
+                imagejpeg($newImage, $this->physicalPath, 100);
+                return $this->save();
+            }
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
+    }
 }

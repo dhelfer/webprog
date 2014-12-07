@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use Yii;
+use \Yii;
 use app\models\Article;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -10,14 +10,38 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\Comment;
 use \app\models\ArticlePreview;
+use app\models\Image;
+use \yii\web\UploadedFile;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
  */
 class ArticleController extends Controller {
-
     public function behaviors() {
+        //allow all:        View
+        //allow logged in:  Create|Createuploadimage|Createadjustimage|Comment|Uploadheaderimage
+        //deny all:         Index|Update|Delete
         return [
+            [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['view', 'create', 'createuploadimage', 'createadjustimage', 'Comment', 'Uploadheaderimage', 'index', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['?', '@'],
+                    ],
+                    [
+                        'actions' => ['create', 'createuploadimage', 'createadjustimage', 'Comment', 'Uploadheaderimage'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['index', 'update', 'delete'],
+                        'allow' => false,
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -59,7 +83,6 @@ class ArticleController extends Controller {
      */
     public function actionCreate($id = null) {
         $post = Yii::$app->request->post();
-        
         if (isset($post['article_preview'])) {
             if (!empty($id)) {
                 $model = ArticlePreview::findOne($id);
@@ -75,7 +98,6 @@ class ArticleController extends Controller {
         } else {
             $model = new Article();
             $model->userId = Yii::$app->user->identity->userId;
-            $model->released = true;
             
             if (!empty($id)) {
                 $preview = ArticlePreview::findOne($id);
@@ -83,7 +105,7 @@ class ArticleController extends Controller {
                 $model->article = $preview->article;
             }
             
-            if ($model->load($post)) {
+            if (Yii::$app->request->isPost && $model->load($post)) {
                 if (strpos($model->categoryValue, 'SubCategory') === 0) {
                     $model->subCategoryId = str_replace('SubCategory', '', $model->categoryValue);
                 } else if (strpos($model->categoryValue, 'Category') === 0) {
@@ -91,12 +113,69 @@ class ArticleController extends Controller {
                 } else {
                     return $this->render('create', ['model' => $model]);
                 }
-
+                
                 if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->articleId]);
+                    return $this->render('create', ['model' => $model, 'defineHeaderImage' => true]);
                 }
             } else {
                 return $this->render('create', ['model' => $model]);
+            }
+        }
+    }
+    
+    public function actionCreateuploadimage() {
+        if (Yii::$app->request->isPost ) {
+            $post = Yii::$app->request->post();
+            
+            if (!isset($post['Article']['articleId'])) {
+                return $this->render('create', ['model' => new Article]);
+            }
+            $model = Article::findOne($post['Article']['articleId']);
+            
+            if (isset($post['cancel'])) {
+                if (!isset($model)) {
+                    $model = new Article;
+                }
+                return $this->render('create', ['model' => $model]);
+            }
+            
+            $image = new Image;
+            $model->file = UploadedFile::getInstance($model, 'file');
+            $image->physicalPath = $model->file->baseName . '.' . $model->file->extension;
+            if ($image->save()) {
+                $model->teaserImage = $image->imageId;
+                if ($model->save()) {
+                    if ($model->file->saveAs(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
+                        if ($image->crop(
+                                Yii::$app->params['article']['teaserImage']['aspectRatio'],
+                                Yii::$app->params['resources']['path']['article-header-images'])) {
+                            return $this->render('create', ['model' => $model, 'adjustHeaderImage' => true]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public function actionCreateadjustimage() {
+        if (Yii::$app->request->isPost ) {
+            $post = Yii::$app->request->post();
+            
+            if (!isset($post['Article']['articleId'])) {
+                return $this->render('create', ['model' => new Article]);
+            }
+            $model = Article::findOne($post['Article']['articleId']);
+            
+            if (isset($post['cancel'])) {
+                if (!isset($model)) {
+                    $model = new Article;
+                }
+                return $this->render('create', ['model' => $model, 'defineHeaderImage' => true]);
+            }
+            
+            $model->released = true;
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->articleId]);
             }
         }
     }
@@ -158,5 +237,18 @@ class ArticleController extends Controller {
             }
         }
         return $this->redirect(['view', 'id' => $model->articleId]);
+    }
+    
+    public function actionUploadheaderimage() {
+        $model = new Image;
+        
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+            
+            $model->physicalPath = 'uploads/' . $model->file->baseName . '.' . $model->file->extension;
+            if ($model->validate()) {                
+                $model->file->saveAs($model->physicalPath);
+            }
+        }
     }
 }

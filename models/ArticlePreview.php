@@ -15,24 +15,22 @@ use Yii;
  *
  * @property User $user
  */
-class ArticlePreview extends \yii\db\ActiveRecord
-{
+class ArticlePreview extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return '{{%article_preview}}';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['title', 'article'], 'string'],
-            [['userId'], 'required'],
+            [['userId', 'title', 'article'], 'required'],
             [['userId'], 'integer'],
             [['dateCreated'], 'safe']
         ];
@@ -41,8 +39,7 @@ class ArticlePreview extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'articlePreviewId' => 'Article Preview ID',
             'title' => 'Title',
@@ -55,8 +52,8 @@ class ArticlePreview extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['userId' => 'userId']);
     }
+
 }

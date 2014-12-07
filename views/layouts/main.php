@@ -33,41 +33,48 @@ AppAsset::register($this);
                     'class' => 'navbar navbar-fixed-top solcity-menu',
                 ],
             ]);
-
-            if (Yii::$app->user->isGuest) {
-                $categories = Category::find()->all();
-                $items = array();
-                foreach ($categories as $category) {
-                    $items[] = array(
-                        'label' => $category->name,
-                        'url' => 'index.php?r=category/view&id=' . $category->categoryId,
-                    );
-                    $subcategories = Subcategory::findAll(array('categoryId' => $category->categoryId));
-                    if (count($subcategories) > 0) {
-                        $items[count($items) - 1]['items'] = array();
-                        foreach ($subcategories as $subcategory) {
-                            $items[count($items) - 1]['items'][] = array(
-                                'label' => $subcategory->name,
-                                'url' => 'index.php?r=sub-category/view&id=' . $subcategory->subCategoryId,
-                            );
-                        }
+            
+            $categories = Category::find()->all();
+            $items = array();
+            foreach ($categories as $category) {
+                $items[] = array(
+                    'label' => $category->name,
+                    'url' => 'index.php?r=category/view&id=' . $category->categoryId,
+                );
+                $subcategories = Subcategory::findAll(array('categoryId' => $category->categoryId));
+                if (count($subcategories) > 0) {
+                    $items[count($items) - 1]['items'] = array();
+                    foreach ($subcategories as $subcategory) {
+                        $items[count($items) - 1]['items'][] = array(
+                            'label' => $subcategory->name,
+                            'url' => 'index.php?r=sub-category/view&id=' . $subcategory->subCategoryId,
+                        );
                     }
                 }
+            }
+            
+            if (Yii::$app->user->isGuest) {
                 echo Nav::widget([
                     'options' => ['class' => 'navbar-nav navbar'],
                     'items' => $items,
                 ]);
             } else {
-                //@todo: show webcrawler-menu only if rss-user is logged in
-                echo Nav::widget([
-                    'options' => ['class' => 'navbar-nav navbar'],
-                    'items' => [
-                        ['label' => 'Neuen Artikel erfassen', 'url' => 'index.php?r=article/create'],
-                        ['label' => 'RSS Feeds verwalten', 'url' => 'index.php?r=webcrawler/index'],
-                        ['label' => 'RSS Import Status', 'url' => 'index.php?r=webcrawler/report'],
-                        ['label' => 'RSS-Artikel freigeben', 'url' => 'index.php?r=webcrawler/confirm'],
-                    ],
-                ]);
+                if (Yii::$app->user->id === Yii::$app->params['rssimport']['user']) {
+                    echo Nav::widget([
+                        'options' => ['class' => 'navbar-nav navbar'],
+                        'items' => [
+                            ['label' => 'RSS Feeds verwalten', 'url' => 'index.php?r=webcrawler/index'],
+                            ['label' => 'RSS Import Status', 'url' => 'index.php?r=webcrawler/report'],
+                            ['label' => 'RSS-Artikel freigeben', 'url' => 'index.php?r=webcrawler/confirm'],
+                        ],
+                    ]);
+                } else {
+                    $items[] = ['label' => 'Neuen Artikel erfassen', 'url' => 'index.php?r=article/create'];
+                    echo Nav::widget([
+                        'options' => ['class' => 'navbar-nav navbar'],
+                        'items' => $items,
+                    ]);
+                }
             }
 
             echo Nav::widget([
@@ -76,11 +83,11 @@ AppAsset::register($this);
                     Yii::$app->user->isGuest ? [
                         'label' => '<i class="fa fa-sign-in fa-lg"></i>',
                         'url' => ['/site/login'],
-                            ] : [
+                    ] : [
                         'label' => '<i class="fa fa-sign-out fa-lg"></i>',
                         'url' => ['/site/logout'],
                         'linkOptions' => ['data-method' => 'post']
-                            ],
+                    ],
                 ],
                 'encodeLabels' => false,
             ]);

@@ -98,9 +98,7 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
-/*
-    menu
-*/
+/* START:menu */
 .solcity-menu {
     background-color: #4863A0;
     font-weight: bold;
@@ -135,10 +133,9 @@ a.desc:after {
 .solcity-menu .navbar-header .navbar-toggle .icon-bar {
     background-color: #FFFFFF;
 }
+/* END:menu */
 
-/*
-    article
-*/
+/* START:article */
 p.readMore {
     text-align: right;
     color: #4863A0;
@@ -151,25 +148,23 @@ div.singleArticle {
 }
 
 div.singleArticle .author {
-    height: 50px;
-    width: 50px;
+    height: 100px;
+    width: 100px;
     position: absolute;
     top: -10px;
     left: -10px;
+    box-shadow: 10px 10px 15px #444444;
+    border-radius: 50px;
 }
 
 div.singleArticle .author img {
-    height: 50px;
-    width: 50px;
-    border-radius: 25px;
+    height: 100%;
+    width: 100%;
+    border-radius: 50px;
 }
 
 div.singleArticle .panel .panel-heading {
     padding: 0px;
-}
-
-div.singleArticle .panel .panel-heading .teaser-image {
-    width: 100%
 }
 
 div.singleArticle .panel .panel-body {
@@ -192,6 +187,13 @@ div.singleArticle .panel .panel-footer {
     padding: 0px;
     padding-right: 10px;
 }
+/* END:article */
+
+/* START:article-form */
+.article-form .header-image {
+    width: 100%;
+}
+/* END:article-form */
 
 .green {
     color: #008000;
@@ -230,3 +232,4 @@ div.singleArticle .panel .panel-footer {
 .create-art-select-cat option.child {
     
 }
+

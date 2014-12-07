@@ -14,8 +14,25 @@ use yii\filters\VerbFilter;
  */
 class CategoryController extends Controller {
 
-    public function behaviors() {
+    public function behaviors() {     
         return [
+            [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['?', '@'],
+                    ],
+                ],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'update', 'delete'],
+                        'allow' => false,
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

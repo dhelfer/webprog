@@ -13,7 +13,7 @@ use Yii;
  *
  * @property Article[] $articles
  * @property Subcategory[] $subcategories
- * @property Webcrawler[] $webcrawlers 
+ * @property Webcrawler[] $webcrawlers
  */
 class Category extends \yii\db\ActiveRecord {
 

@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\helpers\Html;
+use \app\models\Image;
+use \yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -16,7 +18,36 @@ use \yii\helpers\Html;
 class UserController extends Controller {
 
     public function behaviors() {
+        //allow all:        View
+        //allow guest:      Create|Activate|Reset
+        //allow logged in:  Update|Updateimage|Updateimageconfirm
+        //deny all:         Index|Delete
         return [
+            [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['view', 'create', 'activate', 'reset', 'update', 'updateimage', 'updateimageconfirm', 'index', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => ['?', '@'],
+                    ],
+                    [
+                        'actions' => ['create', 'activate', 'reset'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['update', 'updateimage', 'updateimageconfirm'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => false,
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -194,6 +225,65 @@ class UserController extends Controller {
             } else {
                 return $this->render('reset');
             }
+        }
+    }
+    
+    public function actionUpdateimage($id = null) {
+        if (Yii::$app->request->isPost ) {
+            $post = Yii::$app->request->post();
+            
+            if (!isset($post['User']['userId'])) {
+                die('Keine User-Id definiert.');
+            }
+            $model = User::findOne($post['User']['userId']);
+            
+            if (isset($post['cancel'])) {
+                if (!isset($model)) {
+                    die('Keine User-Id definiert.');
+                }
+                return $this->render('view', ['model' => $model]);
+            }
+            
+            $image = new Image;
+            $model->file = UploadedFile::getInstance($model, 'file');
+            $image->physicalPath = time() . $model->file->baseName . '.' . $model->file->extension;
+            if ($image->save()) {
+                $model->imageId = $image->imageId;
+                if ($model->save(false)) {
+                    if ($model->file->saveAs(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
+                        if ($image->crop(
+                                Yii::$app->params['user']['avatarImage']['aspectRatio'],
+                                Yii::$app->params['resources']['path']['user-avatar-images'])) {
+                            return $this->render('updateimage2', ['model' => $model]);
+                        }
+                    }
+                }
+            }
+        } else {
+            if (is_null($id)) {
+                die('Keine User-Id definiert.');
+            }
+            return $this->render('updateimage1', ['model' => $this->findModel($id)]);
+        }
+    }
+    
+    public function actionUpdateimageconfirm() {
+        if (Yii::$app->request->isPost ) {
+            $post = Yii::$app->request->post();
+            
+            if (!isset($post['User']['userId'])) {
+                die('Keine User-Id definiert.');
+            }
+            $model = User::findOne($post['User']['userId']);
+            
+            if (isset($post['cancel'])) {
+                if (!isset($model)) {
+                    die('Keine User-Id definiert.');
+                }
+                return $this->render('updateimage1', ['model' => $model]);
+            }
+            
+            return $this->redirect(['view', 'id' => $model->userId]);
         }
     }
 }

@@ -15,7 +15,7 @@ use \yii\helpers\Html;
  * @property integer $subCategoryId
  * @property integer $released
  * @property integer $categoryId
- * @property string $teaserImage
+ * @property integer $teaserImage
  * @property string $dateCreated
  * @property string $dateLastUpdated
  *
@@ -25,17 +25,18 @@ use \yii\helpers\Html;
  * @property Comment[] $comments
  * @property Image[] $images
  * @property WebcrawlerImportLog[] $webcrawlerImportLogs
+ * @property Image $headerImage
  */
 class Article extends \yii\db\ActiveRecord {
-
     const ARTICLELEN = 200;
-    
+
     private $categoryValue;
-    
+    public $file;
+
     public function setCategoryValue($categoryValue) {
         $this->categoryValue = $categoryValue;
     }
-    
+
     public function getCategoryValue() {
         if (!isset($this->categoryValue)) {
             if (isset($this->categoryId)) {
@@ -48,7 +49,7 @@ class Article extends \yii\db\ActiveRecord {
         }
         return $this->categoryValue;
     }
-    
+
     public function getCategoryOrSubCategory() {
         if (isset($this->category)) {
             return $this->category;
@@ -58,7 +59,7 @@ class Article extends \yii\db\ActiveRecord {
             return null;
         }
     }
-    
+
     public static function rssRelevantAttributes() {
         return [
             'title',
@@ -81,10 +82,11 @@ class Article extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['title', 'article', 'originLink', 'teaserImage'], 'string'],
-            [['userId', 'categoryValue'], 'required'],
-            [['userId', 'subCategoryId', 'released', 'categoryId'], 'integer'],
-            [['dateCreated', 'dateLastUpdated'], 'safe']
+            [['title', 'article', 'originLink'], 'string'],
+            [['userId', 'categoryValue', 'title', 'article'], 'required'],
+            [['userId', 'subCategoryId', 'released', 'categoryId', 'teaserImage'], 'integer'],
+            [['dateCreated', 'dateLastUpdated'], 'safe'],
+            [['file'], 'file', 'extensions' => 'jpg, jpeg'],
         ];
     }
 
@@ -104,6 +106,7 @@ class Article extends \yii\db\ActiveRecord {
             'teaserImage' => 'Teaser Image',
             'dateCreated' => 'Date Created',
             'dateLastUpdated' => 'Date Last Updated',
+            'categoryValue' => 'Kategorie',
         ];
     }
 
@@ -184,21 +187,21 @@ class Article extends \yii\db\ActiveRecord {
     public function buildArticleDetailLinkAsHtml($text, $options = []) {
         return Html::a($text, 'index.php?r=article/view&id=' . $this->articleId, $options);
     }
-    
+
     public function findPrimaryCategorieValueChoice() {
         if (is_null($this->getCategoryValue())) {
             //get most used category from user with awesome select statement
             /*
-                select		count(articleId) as articleCount, concat('Category', cast(ifnull(categoryId, 0) as char)) as category
-                from		sc_article
-                where		userId = 1
-                group by	categoryId
-                union
-                select		count(articleId) as articleCount, concat('SubCategory', cast(ifnull(subCategoryId, 0) as char)) as category
-                from		sc_article
-                where		userId = 1
-                group by	subCategoryId
-                order by	articleCount desc
+              select		count(articleId) as articleCount, concat('Category', cast(ifnull(categoryId, 0) as char)) as category
+              from		sc_article
+              where		userId = 1
+              group by	categoryId
+              union
+              select		count(articleId) as articleCount, concat('SubCategory', cast(ifnull(subCategoryId, 0) as char)) as category
+              from		sc_article
+              where		userId = 1
+              group by	subCategoryId
+              order by	articleCount desc
              */
             $lastArticle = Article::find()->where(['userId' => \Yii::$app->user->id])->orderBy('dateCreated DESC')->one();
             if ($lastArticle) {
@@ -210,7 +213,7 @@ class Article extends \yii\db\ActiveRecord {
             return $this->categoryValue;
         }
     }
-    
+
     public function getTeaserImage() {
         if (!empty($this->teaserImage)) {
             $image = Image::findOne($this->teaserImage);
@@ -223,16 +226,21 @@ class Article extends \yii\db\ActiveRecord {
             return \Yii::$app->params['resources']['default']['article']['teaser_image'];
         }
     }
-    
+
     public function getViewDetailLink() {
         if (!empty($this->originLink)) {
             return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $this->originLink, ['class' => 'icon-animated', 'target' => '_blank']);
         } else {
-            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','index.php?r=article/view&id=' . $this->articleId, ['class' => 'icon-animated']);
+            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', 'index.php?r=article/view&id=' . $this->articleId, ['class' => 'icon-animated']);
         }
     }
-    
+
     public function getUpdateLink() {
-        return Html::a('<span class="glyphicon glyphicon-pencil"></span>','index.php?r=article/update&id=' . $this->articleId, ['class' => 'icon-animated']);
+        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', 'index.php?r=article/update&id=' . $this->articleId, ['class' => 'icon-animated']);
     }
+
+    public function getHeaderImage() {
+        return $this->hasOne(Image::className(), ['imageId' => 'teaserImage']);
+    }
+
 }

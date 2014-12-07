@@ -11,8 +11,26 @@ use \app\models\User;
 use \solcity\rssparser\Importer;
 use \app\models\WebcrawlerImportLog;
 use \yii\grid\GridView;
+use \yii\filters\AccessControl;
 
 class WebcrawlerController extends \yii\web\Controller {
+    public function behaviors() {
+        //allow all actions only to webcrawler-user
+        return [
+            [
+                'class' => AccessControl::className(),
+                'only' => ['import', 'confirm', 'index', 'release', 'create', 'update', 'delete', 'report', 'detaillog', 'deletearticle', 'feeditemstructure', 'confirmall', 'crawlall'],
+                'rules' => [
+                    [
+                        'allow' => true,
+//                        'users' => ['9999'],
+//                        'expression' => '$user->userId==9999',
+                    ],
+                ],
+            ],
+        ];
+    }
+    
     public function actionImport() {
         $state = Importer::widget([
             'options' => [

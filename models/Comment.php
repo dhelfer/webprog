@@ -31,7 +31,8 @@ class Comment extends \yii\db\ActiveRecord {
         return [
             [['comment', 'userId', 'articleId'], 'required'],
             [['comment'], 'string'],
-            [['userId', 'articleId'], 'integer']
+            [['userId', 'articleId'], 'integer'],
+            [['dateCreated'], 'safe'],
         ];
     }
 
@@ -44,6 +45,7 @@ class Comment extends \yii\db\ActiveRecord {
             'comment' => 'Comment',
             'userId' => 'User ID',
             'articleId' => 'Article ID',
+            'dateCreated' => 'Date Created',
         ];
     }
 

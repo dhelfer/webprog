@@ -13,10 +13,10 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'userName')->textInput(['maxlength' => 100]) ?>
-
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => 128]) ?>
     
-    <?= $form->field($model, 'password2')->passwordInput(['maxlength' => 128]) ?>
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => 128]) ?>
+
+    <?= $form->field($model, 'password2')->passwordInput(['maxlength' => 128, 'value' => !$model->isNewRecord ? $model->password : '']) ?>
 
     <?= $form->field($model, 'firstName')->textInput(['maxlength' => 255]) ?>
 

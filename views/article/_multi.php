@@ -17,12 +17,12 @@ use yii\helpers\Url;
     <div class="col-lg-5 singleArticle">
         <div class="author">
             <a href="<?= Url::to(['user/view', 'id' => $article->userId]) ?>">
-                <img src="<?= $article->user->getAvatarImage() ?>" alt="Autor">
+                <img src="<?= $article->user->getAvatarImage() ?>" alt="Autor" title="<?= $article->user->userName ?>">
             </a>
         </div>
         <div class="panel panel-default inArticle">
             <div class="panel-heading" >
-                <img class="teaser-image" src="<?= $article->getTeaserImage() ?>" alt="Titelbild des Artikels">
+                <img class="teaser-image" src="<?= $article->getTeaserImage() ?>" alt="Titelbild des Artikels" width="100%">
             </div>
 
             <div class="panel-body">

@@ -26,10 +26,10 @@ use \yii\db\Expression;
  * @property Image $image
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
-
     public $authKey = 'asdf';
     public $password2;
     public $passwordResetKeyCheck;
+    public $file;
 
     /**
      * @inheritdoc
@@ -51,6 +51,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             [['password2'], 'compare', 'compareAttribute' => 'password', 'operator' => '=='],
             [['userName'], 'unique'],
             [['email'], 'unique'],
+            [['file'], 'file', 'extensions' => 'jpg, jpeg'],
         ];
     }
 

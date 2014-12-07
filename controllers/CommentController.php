@@ -15,7 +15,25 @@ use yii\filters\VerbFilter;
 class CommentController extends Controller {
 
     public function behaviors() {
+        //allow all:        
+        //allow logged in:  Create
+        //deny all:         Index|View|Update|Delete
         return [
+            [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['create', 'index', 'view', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['index', 'view', 'update', 'delete'],
+                        'allow' => false,
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

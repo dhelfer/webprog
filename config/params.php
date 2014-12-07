@@ -30,6 +30,11 @@ return [
         ],
     ],
     'resources' => [
+        'path' => [
+            'temp-upload' => 'temp_upload/',
+            'article-header-images' => 'images/upload/articles/',
+            'user-avatar-images' => 'images/upload/avatars/',
+        ],
         'default' => [
             'user' => [
                 'avatar' => 'images/upload/avatars/0.jpg',
@@ -37,6 +42,16 @@ return [
             'article' => [
                 'teaser_image' => 'images/upload/articles/0/teaser.jpg',
             ],
+        ],
+    ],
+    'article' => [
+        'teaserImage' => [
+            'aspectRatio' => '4',
+        ],
+    ],
+    'user' => [
+        'avatarImage' => [
+            'aspectRatio' => '1',
         ],
     ],
 ];

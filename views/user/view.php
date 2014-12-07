@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use app\models\Article;
 use \yii\grid\GridView;
 use yii\data\ActiveDataProvider;
+use \yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -18,7 +19,9 @@ $this->title = $model->userName;
     
     <div class="row">
         <div class="col-md-4">
-            <?= Html::img($model->getAvatarImage(), ['width' => '300px']) ?>
+            <a href="<?= Url::to(['user/updateimage', 'id' => $model->userId]) ?>">
+                <?= Html::img($model->getAvatarImage(), ['width' => '300px']) ?>
+            </a>
         </div>
         <div class="col-md-8">
             <?= DetailView::widget([
@@ -40,13 +43,13 @@ $this->title = $model->userName;
             'dataProvider' => $dataProvider = new ActiveDataProvider(['query' => Article::find()->where(['userId' => $model->userId, 'released' => 1])]),
             'summary' => Yii::$app->params['text']['gridview']['summary'],
             'columns' => [
+                'dateCreated',
                 'title',
                 [
                     'header' => '',
                     'attribute' => 'viewDetailLink',
                     'format' => 'raw',
                 ],
-                
             ],
         ]); ?>
         </div>
