@@ -8,6 +8,9 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use \app\models\Article;
+use \app\models\Category;
+use \app\models\Subcategory;
 
 class SiteController extends Controller {
 
@@ -63,8 +66,26 @@ class SiteController extends Controller {
         ];
     }
 
-    public function actionIndex() {
-        return $this->render('index');
+    public function actionIndex($category = null, $subcategory = null) {
+        if (!is_null($category)) {
+            $selectedCategory = Category::findOne(['categoryId' => $category]);
+            if ($selectedCategory) {
+                $articles = Article::find()->where(['categoryId' => $selectedCategory->categoryId])->all();
+            } else {
+                return $this->render('error', ['name' => 'Ein Fehler ist aufgetreten', 'message' => 'Die angegebene Kategorie ist ungültig']);
+            }
+        } elseif (!is_null($subcategory)) {
+            $selectedCategory = Subcategory::findOne(['subCategoryId' => $subcategory]);
+            if ($selectedCategory) {
+                $articles = Article::find()->where(['subCategoryId' => $selectedCategory->subCategoryId])->all();
+            } else {
+                return $this->render('error', ['name' => 'Ein Fehler ist aufgetreten', 'message' => 'Die angegebene Subkategorie ist ungültig']);
+            }
+        } else {
+            $articles = Article::find()->where(['released' => '1'])->all();
+        }
+        
+        return $this->render('index', ['articles' => $articles]);
     }
 
     public function actionLogin($user = null) {
@@ -75,7 +96,7 @@ class SiteController extends Controller {
         $model = new LoginForm();
         $model->username = $user;
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->render('index');
+            $this->redirect(['site/index']);
         } else {
             return $this->render('login', ['model' => $model]);
         }

@@ -3,13 +3,14 @@
 use yii\helpers\Url;
 
 /* @var $model app\models\Article */
+/* @var $articles array */
+
 ?>
 
 <div class="row">
         
 <?php
-    $articles = \app\models\Article::find()->where(['released' => '1'])->all();
-    $items = array();
+    
     $counter=0;
     if(count($articles) > 0):
     foreach ($articles as $article):

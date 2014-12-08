@@ -39,7 +39,7 @@ AppAsset::register($this);
             foreach ($categories as $category) {
                 $items[] = array(
                     'label' => $category->name,
-                    'url' => 'index.php?r=category/view&id=' . $category->categoryId,
+                    'url' => 'index.php?r=site/index&category=' . $category->categoryId,
                 );
                 $subcategories = Subcategory::findAll(array('categoryId' => $category->categoryId));
                 if (count($subcategories) > 0) {
@@ -47,7 +47,7 @@ AppAsset::register($this);
                     foreach ($subcategories as $subcategory) {
                         $items[count($items) - 1]['items'][] = array(
                             'label' => $subcategory->name,
-                            'url' => 'index.php?r=sub-category/view&id=' . $subcategory->subCategoryId,
+                            'url' => 'index.php?r=site/index&subcategory=' . $subcategory->subCategoryId,
                         );
                     }
                 }

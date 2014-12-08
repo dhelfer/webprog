@@ -21,14 +21,7 @@ class CategoryController extends Controller {
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['view'],
-                        'allow' => true,
-                        'roles' => ['?', '@'],
-                    ],
-                ],
-                'rules' => [
-                    [
-                        'actions' => ['index', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
                         'allow' => false,
                     ],
                 ],

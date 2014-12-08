@@ -157,14 +157,18 @@ class UserController extends Controller {
     
     public function actionActivate($user, $activationkey) {
         $userObject = User::findByUsernameAndActive($user, 0);
-        if ($userObject->activationKey === $activationkey) {
-            if ($userObject->activate()) {
-                return $this->render('activate', ['activationDone' => true, 'user' => $user]);
+        if ($userObject) {
+            if ($userObject->activationKey === $activationkey) {
+                if ($userObject->activate()) {
+                    return $this->render('activate', ['activationDone' => true, 'user' => $user]);
+                } else {
+                    return $this->render('activate', ['activationDone' => false]);
+                }
             } else {
                 return $this->render('activate', ['activationDone' => false]);
             }
         } else {
-            return $this->render('activate', ['activationDone' => false]);
+            return $this->render('../site/error', ['name' => 'Account-Aktivierung', 'message' => 'Benutzer konnte nicht gefunden werden.']);
         }
     }
     
@@ -174,42 +178,50 @@ class UserController extends Controller {
             
             if (isset($post['passwordResetKeyCheck'])) {
                 $userObject = User::findOne($post['userId']);
-                if ($userObject->passwordResetKey === $post['passwordResetKeyCheck']) {
-                    $userObject->password = $post['password'];
-                    $userObject->saltPassword();
-                    if ($userObject->save(false)) {
-                        return $this->render('resetted', ['message' => '<p>Ihr Password wurde erfolgreich geändert.</p>' . Html::a('Login', 'index.php?r=site/login&user=' . $userObject->userName)]);
+                if ($userObject) {
+                    if ($userObject->passwordResetKey === $post['passwordResetKeyCheck']) {
+                        $userObject->password = $post['password'];
+                        $userObject->saltPassword();
+                        if ($userObject->save(false)) {
+                            return $this->render('resetted', ['message' => '<p>Ihr Password wurde erfolgreich geändert.</p>' . Html::a('Login', 'index.php?r=site/login&user=' . $userObject->userName)]);
+                        } else {
+                            return $this->render('resetted', ['message' => 'Interner Server Error.']);
+                        }
                     } else {
-                        return $this->render('resetted', ['message' => 'Interner Server Error.']);
+                        return $this->render('resetted', ['message' => 'Der Resetcode ist falsch oder abgelaufen..']);
                     }
                 } else {
-                    return $this->render('resetted', ['message' => 'Der Resetcode ist falsch oder abgelaufen..']);
+                    return $this->render('../site/error', ['name' => 'Passwort zurücksetzen', 'message' => 'Benutzer konnte nicht gefunden werden.']);
                 }
             } else {
                 if (isset($post['userName'])) {
                     $userObject = User::findByUsername($post['userName']);
-                    $userObject->passwordResetKey = $userObject->createKey();
-                    $userObject->activationKey = \yii\db\Expression::className('null');
-                    
-                    if ($userObject->save(false)) {
-                        $messageLines = Yii::$app->params['mail']['resetMessage'];
-                        $messageLines[1] = str_replace('{passwordResetKey}', $userObject->passwordResetKey, str_replace('{username}', $userObject->userName, $messageLines[1]));
+                    if ($userObject) {
+                        $userObject->passwordResetKey = $userObject->createKey();
+                        $userObject->activationKey = \yii\db\Expression::className('null');
 
-                        $activationMailSent = Yii::$app->mailer->compose()
-                            ->setTo($userObject->email)
-                            ->setFrom([Yii::$app->params['mail']['fromAddress'] => Yii::$app->params['mail']['fromName']])
-                            ->setSubject(Yii::$app->params['mail']['resetSubject'])
-                            ->setTextBody($messageLines[0] . ': ' . $messageLines[1])
-                            ->setHtmlBody($messageLines[0] . '<br><a href="' . $messageLines[1] . '">' . $messageLines[1] . '</a>')
-                            ->send();
-                        
-                        if ($activationMailSent) {
-                            return $this->render('resetted', ['message' => 'Eine Email mit einem Link, um Ihr Passwort zurückzusetzen, wurde an Sie versandt.']);
+                        if ($userObject->save(false)) {
+                            $messageLines = Yii::$app->params['mail']['resetMessage'];
+                            $messageLines[1] = str_replace('{passwordResetKey}', $userObject->passwordResetKey, str_replace('{username}', $userObject->userName, $messageLines[1]));
+
+                            $activationMailSent = Yii::$app->mailer->compose()
+                                ->setTo($userObject->email)
+                                ->setFrom([Yii::$app->params['mail']['fromAddress'] => Yii::$app->params['mail']['fromName']])
+                                ->setSubject(Yii::$app->params['mail']['resetSubject'])
+                                ->setTextBody($messageLines[0] . ': ' . $messageLines[1])
+                                ->setHtmlBody($messageLines[0] . '<br><a href="' . $messageLines[1] . '">' . $messageLines[1] . '</a>')
+                                ->send();
+
+                            if ($activationMailSent) {
+                                return $this->render('resetted', ['message' => 'Eine Email mit einem Link, um Ihr Passwort zurückzusetzen, wurde an Sie versandt.']);
+                            } else {
+                                return $this->render('resetted', ['message' => 'Die Email mit einem Link, um Ihr Passwort zurückzusetzen, konnte nicht versandt werden.']);
+                            }
                         } else {
-                            return $this->render('resetted', ['message' => 'Die Email mit einem Link, um Ihr Passwort zurückzusetzen, konnte nicht versandt werden.']);
+                            return $this->render('resetted', ['message' => 'Interner Server Error.']);
                         }
                     } else {
-                        return $this->render('resetted', ['message' => 'Interner Server Error.']);
+                        return $this->render('../site/error', ['name' => 'Passwort zurücksetzen', 'message' => 'Benutzer konnte nicht gefunden werden.']);
                     }
                 }
             }
