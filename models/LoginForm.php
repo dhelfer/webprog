@@ -70,5 +70,12 @@ class LoginForm extends Model {
 
         return $this->_user;
     }
-
+    
+    public function attributeLabels() {
+        return [
+            'username' => 'Benutzername',
+            'password' => 'Passwort',
+            'rememberMe' => 'Angaben speichern',
+        ];
+    }
 }

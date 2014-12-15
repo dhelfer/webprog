@@ -16,8 +16,8 @@ $this->title = 'RSS Feeds';
     <?php $form = ActiveForm::begin(['action' => 'index.php?r=webcrawler/crawlall']); ?>
     
     <p>
-        <?= Html::a('Add RSS Feed', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::submitButton('Ausgewählte Feeds importieren', ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('RSS Feed hinzufügen', ['create'], ['class' => 'btn btn-success', 'style' => 'color: #FFFFFF;']) ?>
+        <?= Html::submitButton('Ausgewählte Feeds importieren', ['class' => 'btn btn-warning', 'style' => 'color: #FFFFFF;']) ?>
     </p>
     
     <?= GridView::widget([
@@ -48,4 +48,4 @@ $this->title = 'RSS Feeds';
 
 </div>
 
-<a href='<?php echo $_SERVER["PHP_SELF"] ?>?r=webcrawler/import' class="btn btn-danger">Starte Import</a>
+<?= Html::a('Starte Import', ['import'], ['class' => 'btn btn-danger', 'style' => 'color: #FFFFFF;']) ?>

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use \yii\helpers\Html;
+use \Yii;
 
 /**
  * This is the model class for table "{{%article}}".
@@ -82,8 +83,8 @@ class Article extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['title', 'article', 'originLink'], 'string'],
-            [['userId', 'categoryValue', 'title', 'article'], 'required'],
+            [['title', 'originLink'], 'string'],
+            [['userId', 'categoryValue', 'title'], 'required'],
             [['userId', 'subCategoryId', 'released', 'categoryId', 'teaserImage'], 'integer'],
             [['dateCreated', 'dateLastUpdated'], 'safe'],
             [['file'], 'file', 'extensions' => 'jpg, jpeg'],
@@ -96,16 +97,16 @@ class Article extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'articleId' => 'Article ID',
-            'title' => 'Title',
-            'article' => 'Article',
-            'originLink' => 'Origin Link',
+            'title' => 'Titel',
+            'article' => 'Artikel',
+            'originLink' => 'Link zum Originalartikel',
             'userId' => 'User ID',
-            'subCategoryId' => 'Sub Category ID',
+            'subCategoryId' => 'Unterkategorie',
             'released' => 'Released',
-            'categoryId' => 'Category ID',
-            'teaserImage' => 'Teaser Image',
-            'dateCreated' => 'Date Created',
-            'dateLastUpdated' => 'Date Last Updated',
+            'categoryId' => 'Kategorie',
+            'teaserImage' => 'Headerbild',
+            'dateCreated' => 'Erstellt am',
+            'dateLastUpdated' => 'Zuletzt bearbeitet am',
             'categoryValue' => 'Kategorie',
         ];
     }
@@ -242,5 +243,8 @@ class Article extends \yii\db\ActiveRecord {
     public function getHeaderImage() {
         return $this->hasOne(Image::className(), ['imageId' => 'teaserImage']);
     }
-
+    
+    public function getDateCreatedFormatted() {
+        return Yii::$app->formatter->asDatetime($this->dateCreated, 'php:d.m.Y H:i');
+    }
 }

@@ -46,9 +46,10 @@ class WebcrawlerImportLog extends \yii\db\ActiveRecord {
         return [
             'webcrawlerImportLogId' => 'Webcrawler Import Log ID',
             'webcrawlerId' => 'Webcrawler ID',
-            'articleId' => 'Article ID',
-            'executionTime' => 'Execution Time',
-            'message' => 'Message',
+            'articleId' => 'Artikel-ID',
+            'executionTime' => 'Ausführungszeit',
+            'message' => 'Nachricht',
+            'runNumber' => 'Import-Zähler',
         ];
     }
 

@@ -194,6 +194,24 @@ div.singleArticle .panel .panel-footer {
     width: 100%;
 }
 /* END:article-form */
+/* START:comment-form */
+.comment-form.add-comment {
+    padding: 10px;
+}
+
+.inArticle .comment-table tr {
+    border-bottom: solid 1px #4863a0;
+}
+
+.inArticle .comment-table td {
+    padding: 10px;
+}
+
+.inArticle .comment-table td.meta {
+    padding-right: 20px;
+    background-color: #f5f5f5;
+}
+/* END:comment-form */
 
 .green {
     color: #008000;

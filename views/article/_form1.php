@@ -45,7 +45,7 @@ use \dosamigos\ckeditor\CKEditor;
                 'rows' => 6,
                 'overflow' => 'scroll',
             ],
-            'preset' => 'basic',
+            'preset' => 'default',
         ]) ?>
 
         <div class="form-group">

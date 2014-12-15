@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <?php $form = ActiveForm::begin(['action' => 'index.php?r=webcrawler/confirmall']); ?>
     
-    <?= Html::submitButton('Ausgewählte Artikel veröffentlichen', ['class' => 'btn btn-danger']) ?>
+    <?= Html::submitButton('Ausgewählte Artikel veröffentlichen', ['class' => 'btn btn-warning']) ?>
     
     <br><br>
     
@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'releaseLink',
                 'format' => 'raw',
+                'label' => 'Veröffentlichen',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

@@ -19,16 +19,23 @@ $this->title = $model->userName;
     
     <div class="row">
         <div class="col-md-4">
-            <a href="<?= Url::to(['user/updateimage', 'id' => $model->userId]) ?>">
+            <?php if (Yii::$app->user->id === $model->userId): ?>
+                <a href="<?= Url::to(['user/updateimage', 'id' => $model->userId]) ?>">
+                    <?= Html::img($model->getAvatarImage(), ['width' => '300px']) ?>
+                </a>
+            <?php else: ?>
                 <?= Html::img($model->getAvatarImage(), ['width' => '300px']) ?>
-            </a>
+            <?php endif; ?>
         </div>
         <div class="col-md-8">
             <?= DetailView::widget([
                 'model' => $model,
                 'attributes' => [
                     'userName',
-                    'fullName',
+                    [
+                        'attribute' => 'fullName',
+                        'label' => 'Name',
+                    ]
                 ],
             ]) ?>
             <?php if (Yii::$app->user->id === $model->userId): ?>
@@ -43,7 +50,7 @@ $this->title = $model->userName;
             'dataProvider' => $dataProvider = new ActiveDataProvider(['query' => Article::find()->where(['userId' => $model->userId, 'released' => 1])]),
             'summary' => Yii::$app->params['text']['gridview']['summary'],
             'columns' => [
-                'dateCreated',
+                'dateCreatedFormatted',
                 'title',
                 [
                     'header' => '',

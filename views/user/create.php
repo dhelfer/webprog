@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = 'Create User';
+$this->title = 'Benutzer erstellen';
 ?>
 <div class="user-create">
 

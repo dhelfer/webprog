@@ -42,11 +42,11 @@ class Webcrawler extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'webcrawlerId' => 'Webcrawler ID',
+            'webcrawlerId' => 'RSS-Feed-ID',
             'link' => 'Link',
-            'categoryId' => 'Category ID',
-            'subCategoryId' => 'Sub Category ID',
-            'specialMapping' => 'Special Mapping',
+            'categoryId' => 'Kategorie',
+            'subCategoryId' => 'Unterkategorie',
+            'specialMapping' => 'Spezial-Mapping',
         ];
     }
 

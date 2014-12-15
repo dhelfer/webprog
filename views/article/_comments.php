@@ -8,20 +8,20 @@ use \app\models\Comment;
 ?>
 <div class="row">
     <div class="panel panel-default inArticle">
+        <table class="comment-table">
         <?php foreach ($model->comments as $comment): ?>
-        <div>
-            <div style="float: left; margin-right: 25px;">
-                <p><?= $comment->user->fullname; ?></p>
-            </div>
-            <div style="float: left;">
-                <p><?= $comment->comment; ?></p>
-            </div>
-            <div style="clear:left;"></div>
-        </div>
-        <hr>
+        <tr>
+            <td class="meta">
+                <p><b><?= $comment->user->userName; ?></b></p>
+                <p><?= $comment->dateCreatedFormatted ?></p>
+            </td>
+            <td>
+                <p><?= nl2br($comment->comment) ?></p>
+            </td>
+        </tr>
         <?php endforeach; ?>
-
-        <div class="comment-form">
+        </table>
+        <div class="comment-form add-comment">
             <?php
                 if (empty($newComment)) {
                     $newComment = new Comment();

@@ -31,8 +31,14 @@ $this->title = 'RSS Import Report';
                 'attribute' => 'linkToDetailLog',
                 'format' => 'raw',
             ],
-            'executionDate',
-            'runNumber',
+            [
+                'attribute' => 'executionDate',
+                'label' => 'Ausführungsdatum',
+            ],
+            [
+                'attribute' => 'runNumber',
+                'label' => 'Import-Zähler',
+            ],
             [
                 'attribute' => 'countImported',
                 'header' => '<i class="fa fa-thumbs-up green"></i>',

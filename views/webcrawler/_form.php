@@ -47,7 +47,7 @@ use yii\helpers\ArrayHelper;
     </div>
     
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Erstellen' : 'Aktualisieren', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <a href="index.php?r=webcrawler/index" class="btn btn-warning">Abbrechen</a>
     </div>
     

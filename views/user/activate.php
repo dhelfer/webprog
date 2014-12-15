@@ -12,7 +12,6 @@ use yii\helpers\Html;
         <?php if ($activationMailSent === true): ?>
             <h1>Registrierung erfolgreich</h1>
             <p>Eine Email mit dem Aktivierungscode ist bereits auf dem Weg zu Ihnen.</p>
-            <?=Html::img('images/mail_sending.gif') ?>
         <?php else: ?>
             <h1>Registrierung fehlgeschlagen</h1>
             <div class="alert alert-danger" role="alert">

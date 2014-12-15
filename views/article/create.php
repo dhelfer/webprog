@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $defineHeaderImage boolean */
 /* @var $adjustHeaderImage boolean */
 
-$this->title = 'Create Article';
+$this->title = 'Artikel erstellen';
 ?>
 <div class="article-create">
 

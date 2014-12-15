@@ -61,10 +61,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
     public function attributeLabels() {
         return [
             'userId' => 'User ID',
-            'userName' => 'User Name',
-            'password' => 'Password',
-            'firstName' => 'First Name',
-            'lastName' => 'Last Name',
+            'userName' => 'Benutzername',
+            'password' => 'Passwort',
+            'password2' => 'Passwort wiederholen',
+            'firstName' => 'Vorname',
+            'lastName' => 'Nachname',
             'email' => 'Email',
             'imageId' => 'Image ID',
             'accessToken' => 'Access Token',
@@ -72,6 +73,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             'activationKey' => 'Activation Key',
             'active' => 'Active',
             'passwordResetKey' => 'Password Reset Key',
+            'fullname' => 'asdf',
         ];
     }
 
@@ -109,6 +111,10 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
 
     public function getId() {
         return $this->userId;
+    }
+    
+    public function getUserName() {
+        return $this->userName;
     }
 
     public function validateAuthKey($authKey) {

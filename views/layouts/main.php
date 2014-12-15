@@ -6,6 +6,7 @@ use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
 use app\models\Subcategory;
 use app\models\Category;
+use app\models\User;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -59,7 +60,7 @@ AppAsset::register($this);
                     'items' => $items,
                 ]);
             } else {
-                if (Yii::$app->user->id === Yii::$app->params['rssimport']['user']) {
+                if (User::findOne(Yii::$app->user->id)->userName === Yii::$app->params['rssimport']['user']) {
                     echo Nav::widget([
                         'options' => ['class' => 'navbar-nav navbar'],
                         'items' => [

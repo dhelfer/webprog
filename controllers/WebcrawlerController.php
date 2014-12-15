@@ -147,7 +147,11 @@ class WebcrawlerController extends \yii\web\Controller {
                 ]),
                 'layout' => "{items}",
                 'columns' => [
-                    'state:html',
+                    [
+                        'attribute' => 'state',
+                        'format' => 'html',
+                        'label' => 'Status',
+                    ],
                     'runNumber',
                     'executionTime',
                     'articleId',
