@@ -50,7 +50,10 @@ $this->title = $model->userName;
             'dataProvider' => $dataProvider = new ActiveDataProvider(['query' => Article::find()->where(['userId' => $model->userId, 'released' => 1])]),
             'summary' => Yii::$app->params['text']['gridview']['summary'],
             'columns' => [
-                'dateCreatedFormatted',
+                [
+                    'attribute' => 'dateCreatedFormatted',
+                    'header' => 'Datum',
+                ],
                 'title',
                 [
                     'header' => '',

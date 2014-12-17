@@ -12,9 +12,7 @@ use \yii\base\Exception;
  * @property string $physicalPath
  * @property string $alternativeText
  * @property integer $articleId
- * @property integer $eventId
  *
- * @property Event $event
  * @property Article $article
  * @property User[] $users
  */
@@ -35,7 +33,7 @@ class Image extends \yii\db\ActiveRecord {
         return [
             [['physicalPath'], 'required'],
             [['physicalPath', 'alternativeText'], 'string'],
-            [['articleId', 'eventId'], 'integer'],
+            [['articleId'], 'integer'],
             [['file'], 'file'],
         ];
     }
@@ -49,15 +47,7 @@ class Image extends \yii\db\ActiveRecord {
             'physicalPath' => 'Physical Path',
             'alternativeText' => 'Alternative Text',
             'articleId' => 'Article ID',
-            'eventId' => 'Event ID',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEvent() {
-        return $this->hasOne(Event::className(), ['eventId' => 'eventId']);
     }
 
     /**
@@ -78,7 +68,7 @@ class Image extends \yii\db\ActiveRecord {
         try {
             $originImage = imagecreatefromjpeg(Yii::$app->params['resources']['path']['temp-upload'] . $this->physicalPath);
             if(empty($originImage)){
-                die("asd");
+                die("Bild konnte nicht hochgeladen werden");
                 
             }
             $originImageSize = getimagesize(Yii::$app->params['resources']['path']['temp-upload'] . $this->physicalPath);
@@ -96,15 +86,18 @@ class Image extends \yii\db\ActiveRecord {
                 
                 $newImage = imagecreatetruecolor($newImageSizeX, $newImageSizeY);
                 imagecopy($newImage, $originImage, 0, 0, 0, 0, $originImageSizeX, $originImageSizeY);
-                
-                header('Content-Type: image/jpeg');
-                $this->physicalPath = $targetPath . hash('sha256', time() . $this->physicalPath) . '.jpeg';
-                imagejpeg($newImage, $this->physicalPath, 100);
-                return $this->save();
             }
+            header('Content-Type: image/jpeg');
+            $this->physicalPath = $targetPath . hash('sha256', time() . $this->physicalPath) . '.jpeg';
+            if (isset($newImage)) {
+                imagejpeg($newImage, $this->physicalPath, 100);
+            } else {
+                imagejpeg($originImage, $this->physicalPath, 100);
+            }
+            return $this->save();
+            
             return true;
         } catch (Exception $ex) {
-            die("qasd");
             return false;
         }
     }

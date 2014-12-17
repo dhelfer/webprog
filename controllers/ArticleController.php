@@ -144,20 +144,21 @@ class ArticleController extends Controller {
             $image->physicalPath = $model->file->baseName . '.' . $model->file->extension;
             if ($image->save()) {
                 $model->teaserImage = $image->imageId;
-                if(file_exists("temp_upload\\".$image->physicalPath)){
+                if(file_exists($model->file->tempName)) {
                     if ($model->save()) {
                         if ($model->file->saveAs(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
-                            if ($image->crop(
-                                    Yii::$app->params['article']['teaserImage']['aspectRatio'],
-                                    Yii::$app->params['resources']['path']['article-header-images'])) {
-                                return $this->render('create', ['model' => $model, 'adjustHeaderImage' => true]);
+                            if (file_exists(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
+                                if ($image->crop(
+                                        Yii::$app->params['article']['teaserImage']['aspectRatio'],
+                                        Yii::$app->params['resources']['path']['article-header-images'])) {
+                                    return $this->render('create', ['model' => $model, 'adjustHeaderImage' => true]);
+                                }
                             }
                         }
                     }
-                } else {
-                    return $this->render('create', ['model' => $model, 'defineHeaderImage' => true]);
                 }
             }
+            return $this->render('create', ['model' => $model, 'defineHeaderImage' => true]);
         }
     }
     
