@@ -77,6 +77,10 @@ class Image extends \yii\db\ActiveRecord {
     public function crop($desiredAaspectRatio, $targetPath) {
         try {
             $originImage = imagecreatefromjpeg(Yii::$app->params['resources']['path']['temp-upload'] . $this->physicalPath);
+            if(empty($originImage)){
+                die("asd");
+                
+            }
             $originImageSize = getimagesize(Yii::$app->params['resources']['path']['temp-upload'] . $this->physicalPath);
             $originImageSizeX = $originImageSize[0];
             $originImageSizeY = $originImageSize[1];
@@ -100,6 +104,7 @@ class Image extends \yii\db\ActiveRecord {
             }
             return true;
         } catch (Exception $ex) {
+            die("qasd");
             return false;
         }
     }
