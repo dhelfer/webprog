@@ -261,14 +261,18 @@ class UserController extends Controller {
             $image->physicalPath = time() . $model->file->baseName . '.' . $model->file->extension;
             if ($image->save()) {
                 $model->imageId = $image->imageId;
-                if ($model->save(false)) {
-                    if ($model->file->saveAs(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
-                        if ($image->crop(
-                                Yii::$app->params['user']['avatarImage']['aspectRatio'],
-                                Yii::$app->params['resources']['path']['user-avatar-images'])) {
-                            return $this->render('updateimage2', ['model' => $model]);
+                if(file_exists("temp_upload\\".$image->physicalPath)){
+                    if ($model->save(false)) {
+                        if ($model->file->saveAs(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
+                            if ($image->crop(
+                                    Yii::$app->params['user']['avatarImage']['aspectRatio'],
+                                    Yii::$app->params['resources']['path']['user-avatar-images'])) {
+                                return $this->render('updateimage2', ['model' => $model]);
+                            }
                         }
                     }
+                } else {
+                    return $this->render('updateimage1', ['model' => $model]);
                 }
             }
         } else {
