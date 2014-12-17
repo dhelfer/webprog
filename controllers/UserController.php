@@ -262,9 +262,9 @@ class UserController extends Controller {
             if ($image->save()) {
                 $model->imageId = $image->imageId;
                 if(file_exists($model->file->tempName)) {
-//                    $model->password2 = '***';
-//                    $model->accessToken = '***';
-//                    $model->activationKey = '***';
+                    $model->password2 = '***';
+                    $model->accessToken = '***';
+                    $model->activationKey = '***';
                     
                     if ($model->save(false)) {
                         if ($model->file->saveAs(Yii::$app->params['resources']['path']['temp-upload'] . $image->physicalPath)) {
