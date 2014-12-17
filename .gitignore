@@ -27,7 +27,3 @@ phpunit.phar
 /phpunit.xml
 
 yii.bat
-
-#images
-web/temp_upload
-web/images

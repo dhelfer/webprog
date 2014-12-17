@@ -73,7 +73,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             'activationKey' => 'Activation Key',
             'active' => 'Active',
             'passwordResetKey' => 'Password Reset Key',
-            'fullname' => 'asdf',
         ];
     }
 

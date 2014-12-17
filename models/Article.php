@@ -83,7 +83,7 @@ class Article extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['title', 'originLink'], 'string'],
+            [['title', 'originLink', 'article'], 'string'],
             [['userId', 'categoryValue', 'title'], 'required'],
             [['userId', 'subCategoryId', 'released', 'categoryId', 'teaserImage'], 'integer'],
             [['dateCreated', 'dateLastUpdated'], 'safe'],
